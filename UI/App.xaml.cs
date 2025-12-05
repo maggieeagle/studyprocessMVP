@@ -1,10 +1,11 @@
-﻿using Infrastructure;
+﻿using Application;
+using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Windows;
 
 namespace UI
 {
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         public static AppDbContext DbContext { get; private set; }
 
