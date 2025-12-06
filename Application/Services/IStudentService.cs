@@ -1,3 +1,5 @@
+using Domain.Entities;
+
 namespace ApplicationLayer.Services
 {
     public interface IStudentService

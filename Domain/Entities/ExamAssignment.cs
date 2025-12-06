@@ -1,4 +1,4 @@
-namespace App.Domain
+namespace Domain.Entities
 {
     public class ExamAssignment : Assignment
     {

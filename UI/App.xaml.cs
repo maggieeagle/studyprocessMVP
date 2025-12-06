@@ -1,14 +1,12 @@
-﻿using Application.Interfaces;
-using Infrastructure.Services;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Windows;
+using Infrastructure;
 
 namespace UI
 {
     public partial class App : System.Windows.Application
     {
-        public static AppDbContext DbContext { get; private set; }
+        public static AppDbContext? DbContext { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
