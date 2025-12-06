@@ -1,10 +1,11 @@
 using Domain.Common;
 using Domain.Events;
+using Domain.Exceptions;
 using Domain.ValueObjects;
 
 namespace Domain.Entities
 {
-    public class Student : BaseEntity, IAggregateRoot
+    public class Student : BaseEntity
     {
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
@@ -13,23 +14,19 @@ namespace Domain.Entities
         public int? GroupId { get; private set; }
         public Group? Group { get; private set; }
 
-        public ICollection<Grade> Grades { get; private set; } = new List<Grade>();
-        public ICollection<Enrollment> Enrollments { get; private set; } = new List<Enrollment>();
+        public ICollection<Grade> Grades { get; private set; } = [];
+        public ICollection<Enrollment> Enrollments { get; private set; } = [];
 
-        private readonly List<IDomainEvent> _events = new();
+        private readonly List<IDomainEvent> _events = [];
         public IReadOnlyCollection<IDomainEvent> Events => _events.AsReadOnly();
 
 
         public Student(string firstName, string lastName, Email email)
         {
-            if (string.IsNullOrWhiteSpace(firstName))
-                throw new ArgumentException("First name is required");
+            ArgumentNullException.ThrowIfNull(email);
 
-            if (string.IsNullOrWhiteSpace(lastName))
-                throw new ArgumentException("Last name is required");
-
-            if (email is null)
-                throw new ArgumentNullException(nameof(email));
+            if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("First name is required");
+            if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentException("Last name is required");
 
             FirstName = firstName;
             LastName = lastName;
@@ -39,7 +36,9 @@ namespace Domain.Entities
 
         public void AssignToGroup(Group group)
         {
-            Group = group ?? throw new ArgumentNullException(nameof(group));
+            ArgumentNullException.ThrowIfNull(nameof(group));
+
+            Group = group;
             GroupId = group.Id;
 
             if (!group.Students.Contains(this))
@@ -49,11 +48,9 @@ namespace Domain.Entities
 
         public Enrollment EnrollInCourse(Course course)
         {
-            if (course == null)
-                throw new ArgumentNullException(nameof(course));
+            ArgumentNullException.ThrowIfNull(course);
 
-            if (Enrollments.Any(e => e.CourseId == course.Id))
-                throw new InvalidOperationException("Student is already enrolled in this course.");
+            if (Enrollments.Any(e => e.CourseId == course.Id)) throw new InvalidOperationException("Student is already enrolled in this course.");
 
             var enrollment = new Enrollment(this, course);
             Enrollments.Add(enrollment);
@@ -66,14 +63,10 @@ namespace Domain.Entities
 
         public void AddGrade(Assignment assignment, decimal score)
         {
-            if (assignment == null)
-                throw new ArgumentNullException(nameof(assignment));
+            ArgumentNullException.ThrowIfNull(assignment);
 
-            if (score < 0)
-                throw new DomainException("Score cannot be negative.");
-
-            if (assignment is HomeworkAssignment hw && score > hw.MaxPoints)
-                throw new DomainException($"Score cannot exceed {hw.MaxPoints}.");
+            if (score < 0) throw new DomainException("Score cannot be negative.");
+            if (assignment is HomeworkAssignment hw && score > hw.MaxPoints) throw new DomainException($"Score cannot exceed {hw.MaxPoints}.");
 
             var grade = new Grade(this, assignment, score);
 

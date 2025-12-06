@@ -1,11 +1,12 @@
 using Domain.Common;
+using Domain.Exceptions;
 
 namespace Domain.Entities
 {
     public class Group : BaseEntity
     {
         public string Name { get; private set; }
-        public ICollection<Student> Students { get; private set; } = new List<Student>();
+        public ICollection<Student> Students { get; private set; } = [];
 
         public Group(string name)
         {

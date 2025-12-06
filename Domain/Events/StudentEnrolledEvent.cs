@@ -2,16 +2,10 @@
 
 namespace Domain.Events
 {
-    public class StudentEnrolledEvent : IDomainEvent
+    public class StudentEnrolledEvent(Student student, Course course) : IDomainEvent
     {
-        public Student Student { get; }
-        public Course Course { get; }
+        public Student Student { get; } = student;
+        public Course Course { get; } = course;
         public DateTime OccurredOn { get; } = DateTime.UtcNow;
-
-        public StudentEnrolledEvent(Student student, Course course)
-        {
-            Student = student;
-            Course = course;
-        }
     }
 }

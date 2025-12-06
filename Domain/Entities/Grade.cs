@@ -1,4 +1,5 @@
 using Domain.Common;
+using Domain.Exceptions;
 
 namespace Domain.Entities
 {
@@ -12,9 +13,13 @@ namespace Domain.Entities
 
         public Grade(Student student, Assignment assignment, decimal score)
         {
-            Student = student ?? throw new ArgumentNullException(nameof(student));
-            Assignment = assignment ?? throw new ArgumentNullException(nameof(assignment));
+            ArgumentNullException.ThrowIfNull(nameof(student));
+            ArgumentNullException.ThrowIfNull(nameof(assignment));
+
             if (score < 0) throw new DomainException("Score cannot be negative.");
+
+            Student = student;
+            Assignment = assignment;
             StudentId = student.Id;
             AssignmentId = assignment.Id;
             Score = score;
@@ -23,6 +28,7 @@ namespace Domain.Entities
         public void UpdateScore(decimal newScore)
         {
             if (newScore < 0) throw new DomainException("Score cannot be negative.");
+
             Score = newScore;
         }
     }
