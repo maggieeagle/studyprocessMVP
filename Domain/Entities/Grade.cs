@@ -11,6 +11,7 @@ namespace Domain.Entities
         public Assignment Assignment { get; private set; }
         public decimal Score { get; private set; }
 
+        protected Grade() { }  // for EF core
         public Grade(Student student, Assignment assignment, decimal score)
         {
             ArgumentNullException.ThrowIfNull(nameof(student));

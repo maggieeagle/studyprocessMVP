@@ -7,6 +7,8 @@ namespace Domain.Entities
 {
     public class Student : BaseEntity
     {
+        public int UserId { get; private set; }
+        public User User { get; private set; } = null!;
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public Email Email { get; private set; }
@@ -20,17 +22,17 @@ namespace Domain.Entities
         private readonly List<IDomainEvent> _events = [];
         public IReadOnlyCollection<IDomainEvent> Events => _events.AsReadOnly();
 
-
-        public Student(string firstName, string lastName, Email email)
+        private Student() { } // for EF core
+        internal Student(User user, string firstName, string lastName)
         {
-            ArgumentNullException.ThrowIfNull(email);
-
             if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("First name is required");
             if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentException("Last name is required");
 
+            User = user;
+            UserId = user.Id;
             FirstName = firstName;
             LastName = lastName;
-            Email = email;
+            Email = user.Email;
         }
 
 

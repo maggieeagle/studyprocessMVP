@@ -1,7 +1,15 @@
 namespace Domain.Entities
 {
-    public class ExamAssignment(string title, DateTime dueDate, Course course, DateTime examDate) : Assignment(title, dueDate, course)
+    public class ExamAssignment : Assignment
     {
-        public DateTime ExamDate { get; private set; } = examDate;
+        public DateTime ExamDate { get; private set; }
+
+        protected ExamAssignment() : base() { }  // for EF core
+
+        public ExamAssignment(string title, DateTime dueDate, Course course, DateTime examDate)
+            : base(title, dueDate, course)
+        {
+            ExamDate = examDate;
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace Domain.Entities
 {
     public class HomeworkAssignment : Assignment
     {
+        protected HomeworkAssignment() : base() { }  // for EF core
         public int MaxPoints { get; private set; }
 
         public HomeworkAssignment(string title, DateTime dueDate, Course course, int maxPoints) : base(title, dueDate, course)

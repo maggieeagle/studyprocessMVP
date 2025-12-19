@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace ApplicationLayer.Services
+namespace Application.Interfaces
 {
     public interface IStudentService
     {

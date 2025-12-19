@@ -13,6 +13,7 @@ namespace Domain.Entities
         public Course Course { get; private set; }
         public ICollection<Grade> Grades { get; private set; } = [];
 
+        protected Assignment() { } // for EF core
         protected Assignment(string title, DateTime dueDate, Course course)
         {
             ArgumentNullException.ThrowIfNull(course);
