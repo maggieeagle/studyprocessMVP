@@ -1,21 +1,36 @@
-namespace App.Domain
+using Domain.Common;
+using Domain.Exceptions;
+
+namespace Domain.Entities
 {
-    public class Grade
+    public class Grade : BaseEntity
     {
-        public int Id { get; private set; }
         public int StudentId { get; private set; }
         public Student Student { get; private set; }
         public int AssignmentId { get; private set; }
         public Assignment Assignment { get; private set; }
         public decimal Score { get; private set; }
 
+        protected Grade() { }  // for EF core
         public Grade(Student student, Assignment assignment, decimal score)
         {
+            ArgumentNullException.ThrowIfNull(nameof(student));
+            ArgumentNullException.ThrowIfNull(nameof(assignment));
+
+            if (score < 0) throw new DomainException("Score cannot be negative.");
+
             Student = student;
-            StudentId = student.Id;
             Assignment = assignment;
+            StudentId = student.Id;
             AssignmentId = assignment.Id;
             Score = score;
+        }
+
+        public void UpdateScore(decimal newScore)
+        {
+            if (newScore < 0) throw new DomainException("Score cannot be negative.");
+
+            Score = newScore;
         }
     }
 }

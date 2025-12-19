@@ -1,13 +1,23 @@
-namespace App.Domain
+using Domain.Common;
+using Domain.Exceptions;
+
+namespace Domain.Entities
 {
-    public class Group
+    public class Group : BaseEntity
     {
-        public int Id { get; private set; }
         public string Name { get; private set; }
+        public ICollection<Student> Students { get; private set; } = [];
 
         public Group(string name)
         {
-            Name = name;
+            if (string.IsNullOrWhiteSpace(name)) throw new DomainException("Group name is required.");
+            Name = name.Trim();
+        }
+
+        public void Rename(string newName)
+        {
+            if (string.IsNullOrWhiteSpace(newName)) throw new DomainException("Group name is required.");
+            Name = newName.Trim();
         }
     }
 }
