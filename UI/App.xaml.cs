@@ -3,7 +3,9 @@ using Application.Services;
 using Infrastructure;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System.Windows;
 using UI.Services;
 using UI.ViewModels;
@@ -13,6 +15,7 @@ namespace UI
     public partial class App : System.Windows.Application
     {
         public IServiceProvider Services { get; private set; } = null!;
+        private static IConfiguration Configuration { get; set; } = null!;
 
         public App() { }
 
@@ -20,7 +23,13 @@ namespace UI
         {
             base.OnStartup(e);
 
-            Services = ConfigureServices;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            
+            Configuration = builder.Build();
+
+            Services = ConfigureServices();
 
             using (var scope = Services.CreateScope())
             {
@@ -36,32 +45,30 @@ namespace UI
             mainWindow.Show();
         }
 
-        private static IServiceProvider ConfigureServices
+        private static IServiceProvider ConfigureServices()
         {
-            get
-            {
-                {
-                    var services = new ServiceCollection();
+            var services = new ServiceCollection();
 
-                    services.AddDbContext<AppDbContext>(options =>
-                        options.UseSqlServer(
-                            @"Server=(localdb)\MSSQLLocalDB;Database=StudyProcessMVP;Trusted_Connection=True;"));
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseMySql(
+                    connectionString,
+                    new MySqlServerVersion(new Version(5, 7, 44))));
 
                     services.AddScoped<IUserRepository, UserRepository>();
                     services.AddScoped<IAuthService, AuthService>();
                     services.AddScoped<IRoleRepository, RoleRepository>();
 
-                    services.AddSingleton<MainViewModel>();
-                    services.AddTransient<LoginViewModel>();
-                    services.AddTransient<RegisterViewModel>();
+            services.AddSingleton<MainViewModel>();
+            services.AddTransient<LoginViewModel>();
+            services.AddTransient<RegisterViewModel>();
 
-                    services.AddTransient<INavigationService, NavigationService>();
+            services.AddTransient<INavigationService, NavigationService>();
 
-                    services.AddTransient<MainWindow>();
+            services.AddTransient<MainWindow>();
 
-                    return services.BuildServiceProvider();
-                }
-            }
+            return services.BuildServiceProvider();
         }
     }
 }

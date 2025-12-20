@@ -6,9 +6,9 @@ namespace Domain.Entities
     public class Grade : BaseEntity
     {
         public int StudentId { get; private set; }
-        public Student Student { get; private set; }
+        public Student Student { get; private set; } = null!;
         public int AssignmentId { get; private set; }
-        public Assignment Assignment { get; private set; }
+        public Assignment Assignment { get; private set; } = null!;
         public decimal Score { get; private set; }
 
         protected Grade() { }  // for EF core

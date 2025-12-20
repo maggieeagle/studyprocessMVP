@@ -5,8 +5,8 @@ namespace Domain.Entities
 {
     public class User : BaseEntity
     {
-        public Email Email { get; private set; }
-        public string Password { get; private set; }
+        public Email Email { get; private set; } = null!;
+        public string Password { get; private set; } = null!;
 
         public Student? Student { get; private set; }
         public Teacher? Teacher { get; private set; }
