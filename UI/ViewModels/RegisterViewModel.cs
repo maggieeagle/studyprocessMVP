@@ -6,7 +6,7 @@ using Domain.ValueObjects;
 
 namespace UI.ViewModels
 {
-    public partial class RegisterViewModel(IAuthService authService, INavigationService navigationService, IRoleRepository roleRepository) : ObservableObject
+    public partial class RegisterViewModel(IAuthService authService, INavigationService navigationService) : ObservableObject
     {
         private readonly IAuthService _authService = authService;
         private readonly INavigationService _navigationService = navigationService;
