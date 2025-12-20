@@ -181,7 +181,53 @@
                     <PasswordBox x:Name="PassBox"
                                  Style="{StaticResource BasePasswordBoxStyle}"
                                  PasswordChanged="PassBox_PasswordChanged"
-                                 Margin="0,0,0,20"/>
+                                 Margin="0,0,0,16"/>
+
+                    <Border Style="{StaticResource ErrorBannerStyle}"
+                            Margin="0,0,0,12"
+                            Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibility}}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="⚠" 
+                                       Grid.Column="0"
+                                       FontSize="16"
+                                       Foreground="{StaticResource ErrorBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                       Grid.Column="1"
+                                       Foreground="{StaticResource ErrorBrush}"
+                                       FontSize="13"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource SuccessBannerStyle}"
+                            Margin="0,0,0,12"
+                            Visibility="{Binding SuccessMessage, Converter={StaticResource StringToVisibility}}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="✓" 
+                                       Grid.Column="0"
+                                       FontSize="16"
+                                       Foreground="{StaticResource SuccessBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding SuccessMessage}"
+                                       Grid.Column="1"
+                                       Foreground="{StaticResource SuccessBrush}"
+                                       FontSize="13"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
 
                     <Button Content="Create Account"
                             Command="{Binding RegisterCommand}"

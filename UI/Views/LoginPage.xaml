@@ -70,7 +70,30 @@
                     <TextBlock Text="Password" Style="{StaticResource LabelStyle}"/>
                     <PasswordBox x:Name="PassBox"
                                  Style="{StaticResource BasePasswordBoxStyle}"
-                                 Margin="0,0,0,24"/>
+                                 Margin="0,0,0,16"/>
+
+                    <Border Style="{StaticResource ErrorBannerStyle}"
+                            Margin="0,0,0,16"
+                            Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibility}}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="⚠" 
+                                       Grid.Column="0"
+                                       FontSize="16"
+                                       Foreground="{StaticResource ErrorBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                       Grid.Column="1"
+                                       Foreground="{StaticResource ErrorBrush}"
+                                       FontSize="13"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
 
                     <Button Content="Sign In"
                             Command="{Binding LoginCommand}"
