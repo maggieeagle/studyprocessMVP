@@ -7,10 +7,10 @@ namespace Domain.Entities
     public abstract class Assignment : BaseEntity
     {
         public AssignmentStatus Status { get; private set; } = AssignmentStatus.Draft;
-        public string Title { get; private set; }
+        public string Title { get; private set; } = null!;
         public DateTime DueDate { get; private set; }
         public int CourseId { get; private set; }
-        public Course Course { get; private set; }
+        public Course Course { get; private set; } = null!;
         public ICollection<Grade> Grades { get; private set; } = [];
 
         protected Assignment() { } // for EF core

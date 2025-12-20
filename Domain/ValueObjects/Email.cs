@@ -10,9 +10,9 @@ namespace Domain.ValueObjects
         [GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled)]
         private static partial Regex EmailRegex();
 
-        public string Value { get; private set; }
+        public string Value { get; private set; } = null!;
 
-        protected Email() { } // for EF core
+        private Email() { }
 
         public Email(string value)
         {

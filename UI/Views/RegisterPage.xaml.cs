@@ -1,15 +1,39 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using UI.ViewModels;
 
 namespace UI.Views
 {
-    /// <summary>
-    /// Interaction logic for RegisterPage.xaml
-    /// </summary>
     public partial class RegisterPage : UserControl
     {
         public RegisterPage()
         {
             InitializeComponent();
+            Loaded += OnLoaded;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is RegisterViewModel vm)
+            {
+                vm.Role = "Student";
+            }
+        }
+
+        private void Role_Changed(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is RegisterViewModel vm)
+            {
+                vm.Role = StudentRadio.IsChecked == true ? "Student" : "Teacher";
+            }
+        }
+
+        private void PassBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is RegisterViewModel vm)
+            {
+                vm.Password = PassBox.Password;
+            }
         }
     }
 }
