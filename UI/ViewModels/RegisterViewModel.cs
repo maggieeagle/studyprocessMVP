@@ -6,10 +6,11 @@ using Domain.ValueObjects;
 
 namespace UI.ViewModels
 {
-    public partial class RegisterViewModel(IAuthService authService, INavigationService navigationService) : ObservableObject
+    public partial class RegisterViewModel(IAuthService authService, INavigationService navigationService, IRoleRepository roleRepository) : ObservableObject
     {
         private readonly IAuthService _authService = authService;
         private readonly INavigationService _navigationService = navigationService;
+        private readonly IRoleRepository _roleRepository = roleRepository;
 
         [ObservableProperty]
         private string _role = string.Empty;
@@ -26,6 +27,8 @@ namespace UI.ViewModels
         [ObservableProperty]
         private string _password = string.Empty;
 
+        [ObservableProperty]
+        private IReadOnlyList<string> _roles = [.. roleRepository.GetAll().Select(r => r.Name)];
 
         [RelayCommand]
         private void NavigateLogin()
@@ -71,6 +74,8 @@ namespace UI.ViewModels
                             emailDomainObject);
 
                 bool success = _authService.Register(userRegistrationDto);
+
+                Roles = [.. _roleRepository.GetAll().Select(r => r.Name)];
 
                 if (!success)
                 {

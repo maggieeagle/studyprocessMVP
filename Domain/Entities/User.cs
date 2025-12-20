@@ -11,8 +11,8 @@ namespace Domain.Entities
         public Student? Student { get; private set; }
         public Teacher? Teacher { get; private set; }
 
-        // TODO: Hold roles in separate table
-        public List<string> Roles { get; private set; } = [];
+        private readonly List<UserRole> _roles = [];
+        public IReadOnlyCollection<UserRole> Roles => _roles.AsReadOnly();
 
         private User() { }
 
@@ -34,12 +34,12 @@ namespace Domain.Entities
             return Teacher;
         }
 
-        public void AddRole(string role)
+        public void AddRole(Role role)
         {
-            if (!string.IsNullOrWhiteSpace(role) && !Roles.Contains(role))
-            {
-                Roles.Add(role);
-            }
+            if (_roles.Any(r => r.Role.Name == role.Name))
+                return;
+
+            _roles.Add(new UserRole(this, role));
         }
     }
 }

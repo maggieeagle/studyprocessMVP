@@ -13,6 +13,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Assignment> Assignments { get; set; }
     public DbSet<HomeworkAssignment> HomeworkAssignments { get; set; }
     public DbSet<ExamAssignment> ExamAssignments { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
 
     public class EmailConverter() : ValueConverter<Email, string>(
         v => v.Value,
@@ -40,13 +42,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             entity.HasIndex(u => u.Email).IsUnique();
 
-            // EF Core cannot store List<string> directly. 
-            // TODO: Hold roles in separate table
-            entity.Property(u => u.Roles)
-                .HasConversion(
-                    v => string.Join(',', v),
-                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
-
             entity.HasOne(u => u.Student)
                 .WithOne(s => s.User)
                 .HasForeignKey<Student>(s => s.UserId)
@@ -57,6 +52,30 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasForeignKey<Teacher>(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
+
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.Property(r => r.Name)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            entity.HasIndex(r => r.Name)
+                .IsUnique();
+        });
+
+        modelBuilder.Entity<UserRole>(entity =>
+        {
+            entity.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+            entity.HasOne(ur => ur.User)
+                .WithMany(u => u.Roles)
+                .HasForeignKey(ur => ur.UserId);
+
+            entity.HasOne(ur => ur.Role)
+                .WithMany()
+                .HasForeignKey(ur => ur.RoleId);
+        });
+
 
         modelBuilder.Entity<Teacher>(entity =>
         {
@@ -84,6 +103,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             user.CreateStudent("John", "Doe");
 
             Users.Add(user);
+            SaveChanges();
+        }
+
+        if (!Roles.Any())
+        {
+            Roles.AddRange(
+                new Role("Student"),
+                new Role("Teacher")
+            );
+
             SaveChanges();
         }
     }

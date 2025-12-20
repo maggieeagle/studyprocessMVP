@@ -4,9 +4,11 @@ using Domain.Entities;
 
 namespace Application.Services
 {
-    public class AuthService(IUserRepository users) : IAuthService
+    public class AuthService(IUserRepository users, IRoleRepository roles) : IAuthService
     {
         private readonly IUserRepository _users = users;
+        private readonly IRoleRepository _roles = roles;
+
         private static string? _currentUser;
 
         public event Action? StateChanged;
@@ -15,25 +17,25 @@ namespace Application.Services
         {
             try
             {
-                // Check if user already exists
                 if (_users.GetByEmail(details.Email.Value) != null)
                     return false;
 
                 var user = new User(details.Email, details.Password);
-                user.AddRole(details.Role);
 
-                if (details.Role.Equals("Student"))
-                {
+                var role = _roles.GetByName(details.Role)
+                    ?? throw new Exception("Role not found");
+
+                user.AddRole(role);
+
+                if (details.Role == "Student")
                     user.CreateStudent(details.FirstName, details.LastName);
-                } else if (details.Role.Equals("Teacher"))
-                {
+                else if (details.Role == "Teacher")
                     user.CreateTeacher(details.FirstName, details.LastName);
-                }
 
                 _users.Add(user);
                 return true;
             }
-            catch (Exception)
+            catch
             {
                 return false;
             }

@@ -49,6 +49,7 @@ namespace UI
 
                     services.AddScoped<IUserRepository, UserRepository>();
                     services.AddScoped<IAuthService, AuthService>();
+                    services.AddScoped<IRoleRepository, RoleRepository>();
 
                     services.AddSingleton<MainViewModel>();
                     services.AddTransient<LoginViewModel>();
