@@ -35,19 +35,6 @@ namespace Domain.Entities
             Email = user.Email;
         }
 
-
-        public void AssignToGroup(Group group)
-        {
-            ArgumentNullException.ThrowIfNull(nameof(group));
-
-            Group = group;
-            GroupId = group.Id;
-
-            if (!group.Students.Contains(this))
-                group.Students.Add(this);
-        }
-
-
         public Enrollment EnrollInCourse(Course course)
         {
             ArgumentNullException.ThrowIfNull(course);

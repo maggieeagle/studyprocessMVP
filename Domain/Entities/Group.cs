@@ -5,8 +5,12 @@ namespace Domain.Entities
 {
     public class Group : BaseEntity
     {
-        public string Name { get; private set; }
-        public ICollection<Student> Students { get; private set; } = [];
+        public string Name { get; private set; } = null!;
+        public IReadOnlyCollection<UserGroup> Users => _users.AsReadOnly();
+
+        private readonly List<UserGroup> _users = [];
+
+        private Group() { } // for EF core
 
         public Group(string name)
         {
@@ -18,6 +22,18 @@ namespace Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(newName)) throw new DomainException("Group name is required.");
             Name = newName.Trim();
+        }
+
+        internal void AddUser(User user)
+        {
+            if (_users.Any(ug => ug.UserId == user.Id)) return;
+
+            var userGroup = new UserGroup(user, this);
+            _users.Add(userGroup);
+
+            // add to user's _groups if not already
+            if (!user.Groups.Any(ug => ug.GroupId == this.Id))
+                user._groups.Add(userGroup);
         }
     }
 }

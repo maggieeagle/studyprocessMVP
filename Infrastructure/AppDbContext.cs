@@ -15,6 +15,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<ExamAssignment> ExamAssignments { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
+    public DbSet<Group> Group { get; set; }
+    public DbSet<UserGroup> UserGroup { get; set; }
 
     public class EmailConverter() : ValueConverter<Email, string>(
         v => v.Value,
@@ -76,6 +78,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasForeignKey(ur => ur.RoleId);
         });
 
+        modelBuilder.Entity<UserGroup>(entity =>
+        {
+            entity.HasKey(ug => new { ug.UserId, ug.GroupId });
+
+            entity.HasOne(ug => ug.User)
+                  .WithMany(u => u.Groups)
+                  .HasForeignKey(ug => ug.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(ug => ug.Group)
+                  .WithMany(g => g.Users)
+                  .HasForeignKey(ug => ug.GroupId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
 
         modelBuilder.Entity<Teacher>(entity =>
         {
@@ -97,23 +113,31 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     {
         Database.EnsureCreated();
 
+        if (!Roles.Any())
+        {
+            Roles.AddRange(new Role("Student"), new Role("Teacher"));
+        }
+
         if (!Users.Any())
         {
             var user = new User(new Email("a@a.a"), "123");
             user.CreateStudent("John", "Doe");
 
+            var studentRole = Roles.Local.FirstOrDefault(r => r.Name == "Student") ?? Roles.First(r => r.Name == "Student");
+
+            user.AddRole(studentRole);
+
             Users.Add(user);
-            SaveChanges();
+
+            if (!Group.Any())
+            {
+                var mathGroup = new Group("Math Group");
+                Group.Add(mathGroup);
+
+                user.AssignToGroup(mathGroup);
+            }
         }
 
-        if (!Roles.Any())
-        {
-            Roles.AddRange(
-                new Role("Student"),
-                new Role("Teacher")
-            );
-
-            SaveChanges();
-        }
+        SaveChanges();
     }
 }

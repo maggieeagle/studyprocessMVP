@@ -14,6 +14,9 @@ namespace Domain.Entities
         private readonly List<UserRole> _roles = [];
         public IReadOnlyCollection<UserRole> Roles => _roles.AsReadOnly();
 
+        internal readonly List<UserGroup> _groups = [];
+        public IReadOnlyCollection<UserGroup> Groups => _groups.AsReadOnly();
+
         private User() { }
 
         public User(Email email, string password)
@@ -40,6 +43,15 @@ namespace Domain.Entities
                 return;
 
             _roles.Add(new UserRole(this, role));
+        }
+
+        public void AssignToGroup(Group group)
+        {
+            ArgumentNullException.ThrowIfNull(group);
+
+            if (_groups.Any(ug => ug.GroupId == group.Id)) return;
+
+            group.AddUser(this);
         }
     }
 }
