@@ -26,6 +26,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         modelBuilder.Entity<Enrollment>()
             .HasKey(e => new { e.StudentId, e.CourseId });
+
         modelBuilder.Entity<HomeworkAssignment>();
         modelBuilder.Entity<ExamAssignment>();
 
@@ -34,7 +35,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         {
             entity.Property(u => u.Email)
                 .HasConversion(emailConverter)
-                .HasMaxLength(320);
+                .HasMaxLength(320)
+                .IsRequired();
 
             entity.HasIndex(u => u.Email).IsUnique();
 
@@ -49,15 +51,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .WithOne(s => s.User)
                 .HasForeignKey<Student>(s => s.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(u => u.Teacher)
+                .WithOne(t => t.User)
+                .HasForeignKey<Teacher>(t => t.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Teacher>(entity =>
+        {
+            entity.Ignore(t => t.Email);
         });
 
         modelBuilder.Entity<Student>(entity =>
         {
-            entity.Property(s => s.Email)
-                .HasConversion(emailConverter)
-                .HasMaxLength(320);
-
-            entity.HasIndex(s => s.Email).IsUnique();
+            entity.Ignore(s => s.Email);
         });
 
         modelBuilder.Entity<Course>()

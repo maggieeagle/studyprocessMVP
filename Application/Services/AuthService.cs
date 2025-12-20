@@ -25,6 +25,9 @@ namespace Application.Services
                 if (details.Role.Equals("Student"))
                 {
                     user.CreateStudent(details.FirstName, details.LastName);
+                } else if (details.Role.Equals("Teacher"))
+                {
+                    user.CreateTeacher(details.FirstName, details.LastName);
                 }
 
                 _users.Add(user);
