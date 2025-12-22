@@ -26,6 +26,12 @@ namespace UI.ViewModels
         [ObservableProperty]
         private string _password = string.Empty;
 
+        [ObservableProperty]
+        private string _errorMessage = string.Empty;
+
+        [ObservableProperty]
+        private string _successMessage = string.Empty;
+
 
         [RelayCommand]
         private void NavigateLogin()
@@ -36,27 +42,30 @@ namespace UI.ViewModels
         [RelayCommand]
         private void Register()
         {
-            if (string.IsNullOrWhiteSpace(EmailInput))
+            ErrorMessage = string.Empty;
+            SuccessMessage = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(Role))
             {
-                System.Windows.MessageBox.Show("Please enter an email address.");
+                ErrorMessage = "Please select your role (Student or Teacher)";
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName))
             {
-                System.Windows.MessageBox.Show("Please enter your first and last name.");
+                ErrorMessage = "Please enter your first and last name";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(EmailInput))
+            {
+                ErrorMessage = "Please enter your email address";
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(Password))
             {
-                System.Windows.MessageBox.Show("Please enter a password.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(Role))
-            {
-                System.Windows.MessageBox.Show("Please select a role.");
+                ErrorMessage = "Please enter a password";
                 return;
             }
 
@@ -74,17 +83,19 @@ namespace UI.ViewModels
 
                 if (!success)
                 {
-                    System.Windows.MessageBox.Show("Registration failed. This email may already be registered.");
+                    ErrorMessage = "Registration failed. This email may already be registered.";
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show("Registration successful!");
-                    NavigateLogin();
+                    SuccessMessage = "Account created successfully! Redirecting to login...";
+                    System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(
+                        new Action(() => NavigateLogin()),
+                        System.Windows.Threading.DispatcherPriority.Background);
                 }
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show($"Registration error: {ex.Message}");
+                ErrorMessage = $"Registration error: {ex.Message}";
             }
         }
     }

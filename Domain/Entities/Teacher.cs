@@ -13,8 +13,8 @@ namespace Domain.Entities
     {
         public int UserId { get; private set; }
         public User User { get; private set; } = null!;
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
+        public string FirstName { get; private set; } = null!;
+        public string LastName { get; private set; } = null!;
         public Email Email => User.Email;
         public int? GroupId { get; private set; }
         public Group? Group { get; private set; }

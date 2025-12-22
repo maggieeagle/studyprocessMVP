@@ -1,12 +1,8 @@
-﻿using Application.Interfaces;
-using Application.Services;
-using Infrastructure;
-using Infrastructure.Repositories;
+﻿using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
-using UI.Services;
-using UI.ViewModels;
 using UI.Views;
 
 namespace UI
@@ -14,6 +10,7 @@ namespace UI
     public partial class App : System.Windows.Application
     {
         public IServiceProvider Services { get; private set; } = null!;
+        private static IConfiguration Configuration { get; set; } = null!;
 
         public App() { }
 
@@ -21,20 +18,13 @@ namespace UI
         {
             base.OnStartup(e);
 
-            var services = new ServiceCollection();
-
-            string connectionString = @"Server=(localdb)\MSSQLLocalDB;Database=StudyProcessMVP;Trusted_Connection=True;";
-            int currentStudentId = 1; // from login/auth
-
-            services.RegisterInfrastructure(connectionString);
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
             
-            services.AddSingleton<MainViewModel>();
-            services.RegisterUI(currentStudentId);
+            Configuration = builder.Build();
 
-            services.AddSingleton<MainWindow>();
-
-            var serviceProvider = services.BuildServiceProvider();
-            Services = serviceProvider;
+            Services = ConfigureServices();
 
             using (var scope = Services.CreateScope())
             {
@@ -44,38 +34,23 @@ namespace UI
                 db.SeedData();                 // seed courses and users
             }
 
-            var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
+            var mainWindow = Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
 
             // Show student courses page
-            var studentCoursesPage = serviceProvider.GetRequiredService<StudentCoursesPage>();
+            var studentCoursesPage = Services.GetRequiredService<StudentCoursesPage>();
         }
 
-        private static IServiceProvider ConfigureServices
+        private static IServiceProvider ConfigureServices()
         {
-            get
-            {
-                {
-                    var services = new ServiceCollection();
+            var services = new ServiceCollection();
 
-                    services.AddDbContext<AppDbContext>(options =>
-                        options.UseSqlServer(
-                            @"Server=(localdb)\MSSQLLocalDB;Database=StudyProcessMVP;Trusted_Connection=True;"));
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-                    services.AddScoped<IUserRepository, UserRepository>();
-                    services.AddScoped<IAuthService, AuthService>();
+            services.RegisterInfrastructure(connectionString);
+            services.RegisterUI(studentId: 1);
 
-                    services.AddSingleton<MainViewModel>();
-                    services.AddTransient<LoginViewModel>();
-                    services.AddTransient<RegisterViewModel>();
-
-                    services.AddTransient<INavigationService, NavigationService>();
-
-                    services.AddTransient<MainWindow>();
-
-                    return services.BuildServiceProvider();
-                }
-            }
+            return services.BuildServiceProvider();
         }
     }
 }
