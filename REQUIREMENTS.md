@@ -63,7 +63,7 @@ EF Core 8 – SQLite või SQL Server LocalDB
 
 - [ ] Master‑Detail vaade #1 (Aggregate A) – grid + detail + Add/Edit/Delete.
 
-- [ ] Master‑Detail vaade #2 (Aggregate B) – grid + detail + filtrid.
+- [x] Master‑Detail vaade #2 (Aggregate B) – grid + detail + filtrid.
 
 - [ ] Workflow vaade (staatuse muutmine reeglitega).
 
