@@ -28,25 +28,37 @@ namespace Infrastructure.Repositories
         }
         public async Task Save(Student student)
         {
-            var existingStudent = await _context.Students
-                .Include(s => s.Enrollments)
-                .FirstOrDefaultAsync(s => s.Id == student.Id);
-
-            if (existingStudent == null)
+            if (student.Id == 0)
             {
                 _context.Students.Add(student);
+                await _context.SaveChangesAsync();
+                return;
             }
-            else
-            {
-                _context.Entry(existingStudent).CurrentValues.SetValues(student);
 
-                existingStudent.Enrollments.Clear();
-                foreach (var enrollment in student.Enrollments)
+            var entry = _context.Entry(student);
+
+            if (entry.State == EntityState.Detached)
+            {
+                var existingStudent = await _context.Students
+                    .Include(s => s.Enrollments)
+                    .FirstOrDefaultAsync(s => s.Id == student.Id);
+
+                if (existingStudent != null)
                 {
-                    existingStudent.Enrollments.Add(enrollment);
+                    _context.Entry(existingStudent).CurrentValues.SetValues(student);
+
+                    existingStudent.Enrollments.Clear();
+                    foreach (var enrollment in student.Enrollments)
+                    {
+                        existingStudent.Enrollments.Add(enrollment);
+                    }
                 }
-                _context.Students.Update(student);
+                else
+                {
+                    _context.Students.Add(student);
+                }
             }
+
             await _context.SaveChangesAsync();
         }
     }

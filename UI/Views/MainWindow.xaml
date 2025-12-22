@@ -3,7 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:UI.ViewModels"
         xmlns:views="clr-namespace:UI.Views"
-        Title="Study Platform" Height="450" Width="600">
+        Title="StudyHub" 
+        Height="650" 
+        Width="1000"
+        MinHeight="550"
+        MinWidth="800"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundGradientBrush}">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
@@ -21,36 +27,75 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Border Background="#f0f0f0" Padding="10">
+        <Border Grid.Row="0" 
+                Background="{StaticResource SurfaceBrush}" 
+                Padding="20,12"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,0,0,1">
             <Border.Style>
                 <Style TargetType="Border">
-                    <Setter Property="Visibility" Value="Visible" />
+                    <Setter Property="Visibility" Value="Visible"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Username}" Value="{x:Null}">
-                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Setter Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Username}" Value="">
-                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Setter Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Border.Style>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <TextBlock Text="User: " />
-                <TextBlock Text="{Binding Username}"
-                           FontWeight="Bold"
-                           Margin="0,0,10,0"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-                <Button Content="Sign out"
-                        Command="{Binding SignOutCommand}" />
-            </StackPanel>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="📚" FontSize="20" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="StudyHub" 
+                               FontSize="18" 
+                               FontWeight="Bold" 
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Background="{StaticResource SurfaceLightBrush}" 
+                            CornerRadius="16" 
+                            Padding="10,6" 
+                            Margin="0,0,12,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="26" Height="26" Margin="0,0,8,0">
+                                <Ellipse.Fill>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="{StaticResource PrimaryColor}" Offset="0"/>
+                                        <GradientStop Color="{StaticResource SecondaryColor}" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <TextBlock Text="{Binding Username}" 
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       FontWeight="Medium"
+                                       FontSize="13"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Button Content="Sign Out" 
+                            Command="{Binding SignOutCommand}"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Padding="14,8"
+                            FontSize="12"/>
+                </StackPanel>
+            </Grid>
         </Border>
 
-        <ContentControl Grid.Row="1" Content="{Binding CurrentView}" />
+        <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
     </Grid>
 </Window>
