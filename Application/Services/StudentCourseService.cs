@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Domain.Entities.Course;
 
 namespace Application.Services
 {
@@ -19,17 +20,42 @@ namespace Application.Services
             _students = studentRepo;
         }
 
-        public async Task<List<StudentCourseDTO>> GetAllCoursesWithEnrollmentStatusAsync(int studentId)
+        public async Task<List<StudentCourseDTO>> GetAllCoursesWithEnrollmentStatusAsync(int studentId, string? searchText, string? courseCode, CourseStatus? statusFilter, DateTime? startDate, DateTime? endDate)
         {
             var result = new List<StudentCourseDTO>();
 
-            // Await async calls
+            // TODO: change for SQL query?
             var allCourses = await _courses.GetAllAsync();
             var student = await _students.GetById(studentId);
             if (student == null)
                 throw new Exception("Student not found");
 
             var enrolledCourseIds = new HashSet<int>(student.Enrollments.Select(e => e.CourseId));
+
+            if (!string.IsNullOrWhiteSpace(searchText))
+                allCourses = allCourses
+                    .Where(c => c.Name.Contains(searchText))
+                    .ToList();
+
+            if (!string.IsNullOrWhiteSpace(courseCode))
+                allCourses = allCourses
+                    .Where(c => c.Code.Contains(courseCode))
+                    .ToList();
+
+            if (statusFilter.HasValue)
+                allCourses = allCourses
+                    .Where(c => c.Status == statusFilter.Value)
+                    .ToList();
+
+            if (startDate.HasValue)
+                allCourses = allCourses
+                    .Where(c => c.StartDate >= startDate.Value)
+                    .ToList();
+
+            if (endDate.HasValue)
+                allCourses = allCourses
+                    .Where(c => c.StartDate <= endDate.Value)
+                    .ToList();
 
             foreach (var course in allCourses)
             {
@@ -38,7 +64,10 @@ namespace Application.Services
                     CourseId = course.Id,
                     CourseName = course.Name,
                     Code = course.Code,
-                    IsEnrolled = enrolledCourseIds.Contains(course.Id)
+                    IsEnrolled = enrolledCourseIds.Contains(course.Id),
+                    Status = course.Status,
+                    StartDate = course.StartDate,
+                    EndDate = course.EndDate
                 });
             }
 
