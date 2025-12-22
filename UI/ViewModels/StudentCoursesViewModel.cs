@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using static Domain.Entities.Course;
 
 namespace UI.ViewModels
 {
@@ -13,8 +14,26 @@ namespace UI.ViewModels
         private readonly IStudentCourseService _studentCourseService;
         private readonly int _studentId; // Current logged-in student
 
+        public Array CourseStatusValues => Enum.GetValues(typeof(Course.CourseStatus));
+
         [ObservableProperty]
         private ObservableCollection<StudentCourseDTO> _courses = new();
+
+        [ObservableProperty]
+        private string? _searchText;
+
+        [ObservableProperty]
+        private string? _courseCode;
+
+        [ObservableProperty]
+        private DateTime? _startDate;
+
+        [ObservableProperty]
+        private DateTime? _endDate;
+
+        [ObservableProperty]
+        private Course.CourseStatus? _courseStatus = Course.CourseStatus.Available;
+
 
         public StudentCoursesViewModel(IStudentCourseService studentCourseService, int studentId)
         {
@@ -32,7 +51,7 @@ namespace UI.ViewModels
 
         private async Task LoadCoursesAsync()
         {
-            var list = await _studentCourseService.GetAllCoursesWithEnrollmentStatusAsync(_studentId);
+            var list = await _studentCourseService.GetAllCoursesWithEnrollmentStatusAsync(_studentId, _searchText, _courseCode, _courseStatus, _startDate, _endDate);
             Courses = new ObservableCollection<StudentCourseDTO>(list);
         }
 
