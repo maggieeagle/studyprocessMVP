@@ -1,10 +1,5 @@
 ﻿using Application.Interfaces;
-using Infrastructure;
-using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UI.Services;
 using UI.Views;
 using UI.ViewModels;
@@ -24,11 +19,14 @@ namespace UI
             services.AddTransient<RegisterViewModel>();
             services.AddTransient<StudentCoursesViewModel>(sp =>
             {
+                var navigationService = sp.GetRequiredService<INavigationService>();
                 var studentCourseService = sp.GetRequiredService<IStudentCourseService>();
-                return new StudentCoursesViewModel(studentCourseService, studentId);
+                return new StudentCoursesViewModel(navigationService, studentCourseService, studentId);
             });
+            services.AddSingleton<Func<int, CourseViewModel>>(sp => courseId => new CourseViewModel(courseId, sp.GetRequiredService<ICourseRepository>()));
 
             // Pages
+            services.AddTransient<CoursePage>();
             services.AddTransient<LoginPage>();
             services.AddTransient<RegisterPage>();
             services.AddTransient<StudentCoursesPage>();

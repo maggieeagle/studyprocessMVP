@@ -2,22 +2,22 @@
 using Application.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Domain.Entities;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace UI.ViewModels
 {
     public partial class StudentCoursesViewModel : ObservableObject
     {
         private readonly IStudentCourseService _studentCourseService;
-        private readonly int _studentId; // Current logged-in student
+        private readonly INavigationService _navigationService;
+        private readonly int _studentId;
 
         [ObservableProperty]
         private ObservableCollection<StudentCourseDTO> _courses = new();
 
-        public StudentCoursesViewModel(IStudentCourseService studentCourseService, int studentId)
+        public StudentCoursesViewModel(INavigationService navigationService, IStudentCourseService studentCourseService, int studentId)
         {
+            _navigationService = navigationService;
             _studentCourseService = studentCourseService;
             _studentId = studentId;
 
@@ -38,13 +38,20 @@ namespace UI.ViewModels
 
         private async Task EnrollAsync(StudentCourseDTO courseDto)
         {
-            if (courseDto.IsEnrolled) return; // Already enrolled
+            if (courseDto == null || courseDto.IsEnrolled) return;
 
             await _studentCourseService.Enroll(_studentId, courseDto.CourseId);
-            courseDto.IsEnrolled = true;
 
             await LoadCoursesAsync();
         }
 
+        [RelayCommand]
+        private void NavigateToCourse(StudentCourseDTO course)
+        {
+            if (course != null)
+            {
+                _navigationService.NavigateToCourseDetails(course.CourseId);
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ namespace Domain.Entities
     {
         public string Name { get; private set; }
         public string Code { get; private set; }
+        public string TeacherName { get; set; }
         public ICollection<Assignment> Assignments { get; private set; } = [];
         public ICollection<Enrollment> Enrollments { get; private set; } = [];
 

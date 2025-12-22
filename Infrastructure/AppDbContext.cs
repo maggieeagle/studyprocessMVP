@@ -99,11 +99,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         }
         if (!Courses.Any())
         {
-            var course1 = new Course("Mathematics", "MATH101");
-            var course2 = new Course("History", "HIST101");
+            var course1 = new Course("Mathematics", "MATH101") { TeacherName = "Doctor" };
+            var course2 = new Course("History", "HIST101") { TeacherName = "Teacher" };
 
             Courses.AddRange(course1, course2);
             SaveChanges();
+
+            if (!HomeworkAssignments.Any())
+            {
+                var assignment1 = new HomeworkAssignment("Algebra Quiz", DateTime.Now.AddDays(-2), course1, 10);
+                var assignment2 = new HomeworkAssignment("Final Project", DateTime.Now.AddDays(-2), course1, 10);
+                var assignment3 = new ExamAssignment("Calculus Exam", DateTime.Now.AddDays(-2), course2, DateTime.Now.AddDays(-2));
+
+                Assignments.AddRange(assignment1, assignment2, assignment3);
+                SaveChanges();
+            }
         }
     }
 }

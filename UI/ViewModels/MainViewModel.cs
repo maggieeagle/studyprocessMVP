@@ -45,6 +45,11 @@ namespace UI.ViewModels
             CurrentView = Services.GetRequiredService<StudentCoursesViewModel>();
         }
 
+        public void NavigateToStudentCourses()
+        {
+            CurrentView = Services.GetRequiredService<StudentCoursesViewModel>();
+        }
+
         [RelayCommand]
         private void SignOut()
         {
