@@ -67,5 +67,11 @@ namespace Application.Services
         }
 
         public string GetCurrentUsername() => _currentUser ?? "";
+
+        public int GetCurrentUserId()
+        {
+            var user = _users.GetByEmail(_currentUser ?? "");
+            return user?.Id ?? 0;
+        }
     }
 }

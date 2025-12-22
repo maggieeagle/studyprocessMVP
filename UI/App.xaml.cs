@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using UI.Services;
 using UI.ViewModels;
+using UI.Views;
 
 namespace UI
 {
@@ -20,20 +21,34 @@ namespace UI
         {
             base.OnStartup(e);
 
-            Services = ConfigureServices;
+            var services = new ServiceCollection();
+
+            string connectionString = @"Server=(localdb)\MSSQLLocalDB;Database=StudyProcessMVP;Trusted_Connection=True;";
+            int currentStudentId = 1; // from login/auth
+
+            services.RegisterInfrastructure(connectionString);
+            
+            services.AddSingleton<MainViewModel>();
+            services.RegisterUI(currentStudentId);
+
+            services.AddSingleton<MainWindow>();
+
+            var serviceProvider = services.BuildServiceProvider();
+            Services = serviceProvider;
 
             using (var scope = Services.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                dbContext.SeedData();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+                db.Database.EnsureCreated();   // or db.Database.Migrate(); for final version
+                db.SeedData();                 // seed courses and users
             }
 
-            var mainWindow = Services.GetRequiredService<MainWindow>();
-
-            var mainViewModel = Services.GetRequiredService<MainViewModel>();
-            mainViewModel.Initialize();
-
+            var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
+
+            // Show student courses page
+            var studentCoursesPage = serviceProvider.GetRequiredService<StudentCoursesPage>();
         }
 
         private static IServiceProvider ConfigureServices

@@ -7,6 +7,8 @@ namespace Application.Interfaces
         bool Register(UserRegistrationDto details);
         bool SignIn(UserDto details);
         void SignOut();
+        int GetCurrentUserId();
+        //string GetCurrentUserRole();
         string GetCurrentUsername();
 
         event Action StateChanged;

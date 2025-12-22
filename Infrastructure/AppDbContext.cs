@@ -10,6 +10,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<User> Users { get; set; }
     public DbSet<Student> Students { get; set; }
     public DbSet<Course> Courses { get; set; }
+    public DbSet<Enrollment> Enrollments { get; set; }
     public DbSet<Assignment> Assignments { get; set; }
     public DbSet<HomeworkAssignment> HomeworkAssignments { get; set; }
     public DbSet<ExamAssignment> ExamAssignments { get; set; }
@@ -26,6 +27,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         modelBuilder.Entity<Enrollment>()
             .HasKey(e => new { e.StudentId, e.CourseId });
+
+        modelBuilder.Entity<Enrollment>()
+        .HasOne(e => e.Student)
+        .WithMany(s => s.Enrollments)
+        .HasForeignKey(e => e.StudentId);
+
+        modelBuilder.Entity<Enrollment>()
+            .HasOne(e => e.Course)
+            .WithMany(c => c.Enrollments)
+            .HasForeignKey(e => e.CourseId);
 
         modelBuilder.Entity<HomeworkAssignment>();
         modelBuilder.Entity<ExamAssignment>();
@@ -84,6 +95,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             user.CreateStudent("John", "Doe");
 
             Users.Add(user);
+            SaveChanges();
+        }
+        if (!Courses.Any())
+        {
+            var course1 = new Course("Mathematics", "MATH101");
+            var course2 = new Course("History", "HIST101");
+
+            Courses.AddRange(course1, course2);
             SaveChanges();
         }
     }
