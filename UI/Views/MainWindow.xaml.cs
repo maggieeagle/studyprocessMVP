@@ -9,6 +9,8 @@ namespace UI
         {
             InitializeComponent();
             DataContext = vm;
+
+            vm.Initialize();
         }
     }
 }

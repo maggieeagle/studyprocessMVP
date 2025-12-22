@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using UI.Views;
 
 namespace UI.ViewModels
 {
@@ -41,9 +42,7 @@ namespace UI.ViewModels
 
         private void NavigateToDashboard()
         {
-            CurrentView = null;
-            // TODO: Implement DashboardView
-            // CurrentView = _serviceProvider.GetRequiredService<DashboardViewModel>();
+            CurrentView = Services.GetRequiredService<StudentCoursesViewModel>();
         }
 
         [RelayCommand]

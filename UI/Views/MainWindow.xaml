@@ -18,6 +18,11 @@
         <DataTemplate DataType="{x:Type vm:RegisterViewModel}">
             <views:RegisterPage />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:StudentCoursesViewModel}">
+            <views:StudentCoursesPage />
+        </DataTemplate>
+
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Window.Resources>
 
     <Grid>

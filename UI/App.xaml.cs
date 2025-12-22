@@ -1,14 +1,9 @@
-﻿using Application.Interfaces;
-using Application.Services;
-using Infrastructure;
-using Infrastructure.Repositories;
+﻿using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System.Windows;
-using UI.Services;
-using UI.ViewModels;
+using UI.Views;
 
 namespace UI
 {
@@ -33,16 +28,17 @@ namespace UI
 
             using (var scope = Services.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                dbContext.SeedData();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+                db.Database.EnsureCreated();   // or db.Database.Migrate(); for final version
+                db.SeedData();                 // seed courses and users
             }
 
             var mainWindow = Services.GetRequiredService<MainWindow>();
-
-            var mainViewModel = Services.GetRequiredService<MainViewModel>();
-            mainViewModel.Initialize();
-
             mainWindow.Show();
+
+            // Show student courses page
+            var studentCoursesPage = Services.GetRequiredService<StudentCoursesPage>();
         }
 
         private static IServiceProvider ConfigureServices()
@@ -51,21 +47,8 @@ namespace UI
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseMySql(
-                    connectionString,
-                    new MySqlServerVersion(new Version(5, 7, 44))));
-
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IAuthService, AuthService>();
-
-            services.AddSingleton<MainViewModel>();
-            services.AddTransient<LoginViewModel>();
-            services.AddTransient<RegisterViewModel>();
-
-            services.AddTransient<INavigationService, NavigationService>();
-
-            services.AddTransient<MainWindow>();
+            services.RegisterInfrastructure(connectionString);
+            services.RegisterUI(studentId: 1);
 
             return services.BuildServiceProvider();
         }
