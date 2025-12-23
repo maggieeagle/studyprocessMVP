@@ -14,5 +14,11 @@
     <Compile Update="Views\RegisterPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\SubmitAssignmentWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\AddAssignmentWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ namespace Application.Interfaces
         bool SignIn(UserDto details);
         void SignOut();
         int GetCurrentUserId();
-        //string GetCurrentUserRole();
+        string[] GetCurrentUserRoles();
         string GetCurrentUsername();
 
         event Action StateChanged;

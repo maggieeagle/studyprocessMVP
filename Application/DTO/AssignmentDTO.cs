@@ -9,4 +9,16 @@
         public string Status { get; set; } = string.Empty; // "Submitted", "Overdue", etc.
         public string Grade { get; set; } = string.Empty; // "A", "B", etc.
     }
+
+    public class AddAssignmentDTO
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty; // "Homework" or "Exam"
+        public DateTime DueDate { get; set; }
+
+        // Specific properties
+        public int MaxPoints { get; set; } // For Homework
+        public DateTime? ExamDate { get; set; } // For Exam
+    }
 }

@@ -10,16 +10,29 @@ namespace UI.ViewModels
     {
         private readonly IStudentCourseService _studentCourseService;
         private readonly INavigationService _navigationService;
-        private readonly int _studentId;
+        private readonly IAuthService _authService;
 
         [ObservableProperty]
         private ObservableCollection<StudentCourseDTO> _courses = new();
 
-        public StudentCoursesViewModel(INavigationService navigationService, IStudentCourseService studentCourseService, int studentId)
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsStudent))]
+        private bool _isTeacher;
+
+        public bool IsStudent => !IsTeacher;
+
+        public StudentCoursesViewModel(
+            INavigationService navigationService,
+            IStudentCourseService studentCourseService,
+            IAuthService authService)
         {
             _navigationService = navigationService;
             _studentCourseService = studentCourseService;
-            _studentId = studentId;
+            _authService = authService;
+
+            _authService.StateChanged += OnAuthStateChanged;
+
+            UpdateRole();
 
             LoadCoursesCommand = new AsyncRelayCommand(LoadCoursesAsync);
             EnrollCommand = new AsyncRelayCommand<StudentCourseDTO>(EnrollAsync);
@@ -27,12 +40,26 @@ namespace UI.ViewModels
             _ = LoadCoursesAsync();
         }
 
+        private void UpdateRole()
+        {
+            var roles = _authService.GetCurrentUserRoles();
+            IsTeacher = roles.Contains("Teacher");
+        }
+
+        private void OnAuthStateChanged()
+        {
+            UpdateRole();
+        }
+
         public IAsyncRelayCommand LoadCoursesCommand { get; }
         public IAsyncRelayCommand<StudentCourseDTO> EnrollCommand { get; }
 
         private async Task LoadCoursesAsync()
         {
-            var list = await _studentCourseService.GetAllCoursesWithEnrollmentStatusAsync(_studentId);
+            int currentId = _authService.GetCurrentUserId();
+            var list = await _studentCourseService
+                .GetAllCoursesWithEnrollmentStatusAsync(currentId);
+
             Courses = new ObservableCollection<StudentCourseDTO>(list);
         }
 
@@ -40,7 +67,9 @@ namespace UI.ViewModels
         {
             if (courseDto == null || courseDto.IsEnrolled) return;
 
-            await _studentCourseService.Enroll(_studentId, courseDto.CourseId);
+            await _studentCourseService.Enroll(
+                _authService.GetCurrentUserId(),
+                courseDto.CourseId);
 
             await LoadCoursesAsync();
         }

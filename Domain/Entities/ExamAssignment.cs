@@ -6,8 +6,7 @@ namespace Domain.Entities
 
         protected ExamAssignment() : base() { }  // for EF core
 
-        public ExamAssignment(string title, DateTime dueDate, Course course, DateTime examDate)
-            : base(title, dueDate, course)
+        public ExamAssignment(string title, string description, DateTime dueDate, Course course, DateTime examDate) : base(title, description, dueDate, course)
         {
             ExamDate = examDate;
         }

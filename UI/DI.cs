@@ -8,7 +8,7 @@ namespace UI
 {
     public static class DI
     {
-        public static IServiceCollection RegisterUI(this IServiceCollection services, int studentId)
+        public static IServiceCollection RegisterUI(this IServiceCollection services)
         {
             // Navigation
             services.AddSingleton<INavigationService, NavigationService>();
@@ -19,11 +19,21 @@ namespace UI
             services.AddTransient<RegisterViewModel>();
             services.AddTransient<StudentCoursesViewModel>(sp =>
             {
-                var navigationService = sp.GetRequiredService<INavigationService>();
-                var studentCourseService = sp.GetRequiredService<IStudentCourseService>();
-                return new StudentCoursesViewModel(navigationService, studentCourseService, studentId);
+                return new StudentCoursesViewModel(
+                    sp.GetRequiredService<INavigationService>(),
+                    sp.GetRequiredService<IStudentCourseService>(),
+                    sp.GetRequiredService<IAuthService>() // Inject AuthService here
+                );
             });
-            services.AddSingleton<Func<int, CourseViewModel>>(sp => courseId => new CourseViewModel(courseId, sp.GetRequiredService<ICourseRepository>()));
+
+            services.AddSingleton<Func<int, CourseViewModel>>(sp => courseId =>
+            {
+                return new CourseViewModel(
+                    courseId,
+                    sp.GetRequiredService<ICourseRepository>(),
+                    sp.GetRequiredService<IAuthService>()
+                );
+            });
 
             // Pages
             services.AddTransient<CoursePage>();

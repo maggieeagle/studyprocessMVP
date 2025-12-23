@@ -3,14 +3,16 @@ using Application.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Windows;
+using UI.Views;
 
 namespace UI.ViewModels
 {
     public partial class CourseViewModel : ObservableObject
     {
         private readonly ICourseRepository _repository;
+        private readonly IAuthService _authService;
         private readonly int _courseId;
-        private readonly int _studentId = 1;
 
         [ObservableProperty]
         private string courseName;
@@ -21,19 +23,30 @@ namespace UI.ViewModels
         [ObservableProperty]
         private string teacherName;
 
+        [ObservableProperty]
+        private bool isTeacher;
+
         public ObservableCollection<AssignmentDTO> Assignments { get; } = new();
 
-        public CourseViewModel(int courseId, ICourseRepository repository)
+        public CourseViewModel(
+            int courseId,
+            ICourseRepository repository,
+            IAuthService authService)
         {
             _courseId = courseId;
             _repository = repository;
+            _authService = authService;
 
             LoadCourseDetailsAsync();
         }
 
         private async void LoadCourseDetailsAsync()
         {
-            var details = await _repository.GetCourseDetailsAsync(_courseId, _studentId);
+            int currentUserId = _authService.GetCurrentUserId();
+
+            IsTeacher = await _repository.IsTeacherAsync(currentUserId);
+
+            var details = await _repository.GetCourseDetailsAsync(_courseId, currentUserId);
 
             CourseName = details.CourseName;
             Code = details.Code;
@@ -47,9 +60,43 @@ namespace UI.ViewModels
         }
 
         [RelayCommand]
-        private void OpenSubmitModal(AssignmentDTO assignment)
+        private async Task OpenSubmitWindow(AssignmentDTO assignment)
         {
-            // Logic to open modal window goes here
+            int currentUserId = _authService.GetCurrentUserId();
+            var dialog = new SubmitAssignmentWindow();
+
+            if (dialog.ShowDialog() == true)
+            {
+                string studentAnswer = dialog.Answer;
+
+                await _repository.SubmitAssignmentAsync(currentUserId, assignment.Id, studentAnswer);
+
+                assignment.Status = "Submitted";
+                MessageBox.Show("Assignment submitted successfully!");
+            }
+        }
+
+        [RelayCommand]
+        private async Task OpenAddAssignmentWindow()
+        {
+            var dialog = new AddAssignmentWindow();
+
+            if (dialog.ShowDialog() == true)
+            {
+                var newAssignment = dialog.Result;
+
+                try
+                {
+                    await _repository.AddAssignmentAsync(_courseId, newAssignment);
+
+                    LoadCourseDetailsAsync();
+                    MessageBox.Show("Assignment added successfully!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error adding assignment: {ex.Message}");
+                }
+            }
         }
     }
 }

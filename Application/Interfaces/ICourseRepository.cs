@@ -7,7 +7,10 @@ namespace Application.Interfaces
     {
         Task<List<Course>> GetAllAsync();
         Task<Course> GetById(int id);
-        Task<List<CourseDetailDTO>> GetCoursesForStudentAsync(int studentId);
+        Task<List<CourseDetailDTO>> GetAllCoursesAsync();
         Task<CourseDetailDTO> GetCourseDetailsAsync(int courseId, int studentId);
+        Task SubmitAssignmentAsync(int studentId, int assignmentId, string content);
+        Task AddAssignmentAsync(int courseId, AddAssignmentDTO dto);
+        Task<bool> IsTeacherAsync(int userId);
     }
 }

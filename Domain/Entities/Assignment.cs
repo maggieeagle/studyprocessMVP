@@ -8,19 +8,21 @@ namespace Domain.Entities
     {
         public AssignmentStatus Status { get; private set; } = AssignmentStatus.Draft;
         public string Title { get; private set; } = null!;
+        public string Description { get; set; } = string.Empty;
         public DateTime DueDate { get; private set; }
         public int CourseId { get; private set; }
         public Course Course { get; private set; } = null!;
         public ICollection<Grade> Grades { get; private set; } = [];
 
         protected Assignment() { } // for EF core
-        protected Assignment(string title, DateTime dueDate, Course course)
+        protected Assignment(string title, string description, DateTime dueDate, Course course)
         {
             ArgumentNullException.ThrowIfNull(course);
 
             if (string.IsNullOrWhiteSpace(title)) throw new DomainException("Title required.");
 
             Title = title.Trim();
+            Description = description;
             DueDate = dueDate;
             Course = course;
             CourseId = course.Id;

@@ -48,7 +48,7 @@ namespace UI
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             services.RegisterInfrastructure(connectionString);
-            services.RegisterUI(studentId: 1);
+            services.RegisterUI();
 
             return services.BuildServiceProvider();
         }
