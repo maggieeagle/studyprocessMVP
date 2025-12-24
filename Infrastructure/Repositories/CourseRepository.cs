@@ -54,7 +54,11 @@ namespace Infrastructure.Repositories
                                  (_context.Submissions.Any(s => s.AssignmentId == a.Id && s.StudentId == studentId)
                                  ? "Submitted"
                                  : (a.DueDate < DateTime.Now ? "Overdue" : "Not Submitted")),
-                        Grade = "-"
+                        Grade = _context.Submissions
+                            .Where(s => s.AssignmentId == a.Id && s.StudentId == studentId)
+                            .Select(s => s.Grade)
+                            .FirstOrDefault()
+
                     }).ToList()
                 })
                 .FirstOrDefaultAsync();
@@ -62,15 +66,15 @@ namespace Infrastructure.Repositories
 
         public async Task<List<CourseDetailDTO>> GetAllCoursesAsync()
         {
-             return await _context.Courses
-                .AsNoTracking()
-                .Select(c => new CourseDetailDTO
-                {
-                    CourseId = c.Id,
-                    CourseName = c.Name,
-                    Code = c.Code,
-                    TeacherName = c.TeacherName
-                }).ToListAsync();
+            return await _context.Courses
+               .AsNoTracking()
+               .Select(c => new CourseDetailDTO
+               {
+                   CourseId = c.Id,
+                   CourseName = c.Name,
+                   Code = c.Code,
+                   TeacherName = c.TeacherName
+               }).ToListAsync();
         }
 
         public async Task SubmitAssignmentAsync(int userId, int assignmentId, string content)
@@ -111,5 +115,47 @@ namespace Infrastructure.Repositories
         {
             return await _context.Teachers.AnyAsync(t => t.UserId == userId);
         }
+        public async Task<List<SubmissionDTO>> GetSubmissionsForAssignmentAsync(int assignmentId)
+        {
+            return await _context.Submissions
+                .AsNoTracking()
+                .Include(s => s.Student)
+                .Where(s => s.AssignmentId == assignmentId)
+                .Select(s => new SubmissionDTO
+                {
+                    SubmissionId = s.Id,
+                    StudentId = s.StudentId,
+                    StudentFirstName = s.Student.FirstName,
+                    StudentLastName = s.Student.LastName,
+                    Answer = s.Content,
+                    SubmittedAt = s.SubmittedAt,
+                    Grade = s.Grade
+                })
+                .ToListAsync();
+        }
+
+        public async Task SaveGradesAsync(List<SubmissionDTO> submissions)
+        {
+            var submissionIds = submissions
+                .Where(s => s.Grade.HasValue)
+                .Select(s => s.SubmissionId)
+                .ToList();
+
+            if (!submissionIds.Any())
+                return;
+
+            var entities = await _context.Submissions
+                .Where(s => submissionIds.Contains(s.Id))
+                .ToListAsync();
+
+            foreach (var entity in entities)
+            {
+                var dto = submissions.First(s => s.SubmissionId == entity.Id);
+                entity.Grade = dto.Grade;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

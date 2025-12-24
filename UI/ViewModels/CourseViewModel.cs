@@ -12,6 +12,7 @@ namespace UI.ViewModels
     {
         private readonly ICourseRepository _repository;
         private readonly IAuthService _authService;
+        private readonly INavigationService _navigationService;
         private readonly int _courseId;
 
         [ObservableProperty]
@@ -24,18 +25,23 @@ namespace UI.ViewModels
         private string teacherName;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsStudent))]
         private bool isTeacher;
+
+        public bool IsStudent => !IsTeacher;
 
         public ObservableCollection<AssignmentDTO> Assignments { get; } = new();
 
         public CourseViewModel(
             int courseId,
             ICourseRepository repository,
-            IAuthService authService)
+            IAuthService authService,
+            INavigationService navigationService)
         {
             _courseId = courseId;
             _repository = repository;
             _authService = authService;
+            _navigationService = navigationService;
 
             LoadCourseDetailsAsync();
         }
@@ -97,6 +103,21 @@ namespace UI.ViewModels
                     MessageBox.Show($"Error adding assignment: {ex.Message}");
                 }
             }
+        }
+
+        [RelayCommand]
+        private async Task OpenViewSubmissionsWindow(AssignmentDTO assignment)
+        {
+            if (assignment == null) return;
+
+            var window = new ViewSubmissionsWindow(assignment.Id, _repository);
+            window.ShowDialog();
+        }
+
+        [RelayCommand]
+        private void GoBack()
+        {
+            _navigationService.NavigateToStudentCourses();
         }
     }
 }

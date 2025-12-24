@@ -12,5 +12,7 @@ namespace Application.Interfaces
         Task SubmitAssignmentAsync(int studentId, int assignmentId, string content);
         Task AddAssignmentAsync(int courseId, AddAssignmentDTO dto);
         Task<bool> IsTeacherAsync(int userId);
+        Task<List<SubmissionDTO>> GetSubmissionsForAssignmentAsync(int assignmentId);
+        Task SaveGradesAsync(List<SubmissionDTO> submissions);
     }
 }

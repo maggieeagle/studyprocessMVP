@@ -10,5 +10,6 @@
 
         public virtual required Student Student { get; set; }
         public virtual required Assignment Assignment { get; set; }
+        public int? Grade { get; set; }
     }
 }

@@ -7,7 +7,7 @@
         public string Type { get; set; } = string.Empty; // "Homework", "Exam"
         public DateTime DueDate { get; set; }
         public string Status { get; set; } = string.Empty; // "Submitted", "Overdue", etc.
-        public string Grade { get; set; } = string.Empty; // "A", "B", etc.
+        public int? Grade { get; set; }
     }
 
     public class AddAssignmentDTO

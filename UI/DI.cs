@@ -22,7 +22,7 @@ namespace UI
                 return new StudentCoursesViewModel(
                     sp.GetRequiredService<INavigationService>(),
                     sp.GetRequiredService<IStudentCourseService>(),
-                    sp.GetRequiredService<IAuthService>() // Inject AuthService here
+                    sp.GetRequiredService<IAuthService>()
                 );
             });
 
@@ -31,7 +31,8 @@ namespace UI
                 return new CourseViewModel(
                     courseId,
                     sp.GetRequiredService<ICourseRepository>(),
-                    sp.GetRequiredService<IAuthService>()
+                    sp.GetRequiredService<IAuthService>(),
+                    sp.GetRequiredService<INavigationService>()
                 );
             });
 

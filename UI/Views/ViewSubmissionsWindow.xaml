@@ -1,0 +1,43 @@
+﻿<Window x:Class="UI.Views.ViewSubmissionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Assignment Submissions"
+        Height="450" Width="700"
+        WindowStartupLocation="CenterOwner">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <DataGrid ItemsSource="{Binding Submissions}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  Grid.Row="0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Student" Width="*">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding StringFormat="{}{0} {1}">
+                            <Binding Path="StudentFirstName"/>
+                            <Binding Path="StudentLastName"/>
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Answer" Binding="{Binding Answer}" Width="2*"/>
+                <DataGridTextColumn Header="Submitted At" Binding="{Binding SubmittedAt, StringFormat=g}" Width="Auto"/>
+
+                <DataGridTextColumn Header="Grade" Binding="{Binding Grade, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Grid.Row="1" 
+                Content="Save Grades"
+                Command="{Binding SaveGradesCommand}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Padding="15,5"
+                Margin="0,15,0,0"/>
+    </Grid>
+</Window>
