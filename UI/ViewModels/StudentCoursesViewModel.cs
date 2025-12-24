@@ -3,6 +3,8 @@ using Application.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using static Domain.Entities.Course;
 
 namespace UI.ViewModels
 {
@@ -12,6 +14,8 @@ namespace UI.ViewModels
         private readonly INavigationService _navigationService;
         private readonly IAuthService _authService;
 
+        public Array CourseStatusValues => Enum.GetValues(typeof(Course.CourseStatus));
+
         [ObservableProperty]
         private ObservableCollection<StudentCourseDTO> _courses = new();
 
@@ -20,11 +24,21 @@ namespace UI.ViewModels
         private bool _isTeacher;
 
         public bool IsStudent => !IsTeacher;
+        private string? _searchText;
 
-        public StudentCoursesViewModel(
-            INavigationService navigationService,
-            IStudentCourseService studentCourseService,
-            IAuthService authService)
+        [ObservableProperty]
+        private string? _courseCode;
+
+        [ObservableProperty]
+        private DateTime? _startDate;
+
+        [ObservableProperty]
+        private DateTime? _endDate;
+
+        [ObservableProperty]
+        private Course.CourseStatus? _courseStatus = Course.CourseStatus.Available;
+
+        public StudentCoursesViewModel(INavigationService navigationService, IStudentCourseService studentCourseService, IAuthService authService)
         {
             _navigationService = navigationService;
             _studentCourseService = studentCourseService;
@@ -57,9 +71,8 @@ namespace UI.ViewModels
         private async Task LoadCoursesAsync()
         {
             int currentId = _authService.GetCurrentUserId();
-            var list = await _studentCourseService
-                .GetAllCoursesWithEnrollmentStatusAsync(currentId);
 
+            var list = await _studentCourseService.GetAllCoursesWithEnrollmentStatusAsync(currentId, _searchText, _courseCode, _courseStatus, _startDate, _endDate);
             Courses = new ObservableCollection<StudentCourseDTO>(list);
         }
 

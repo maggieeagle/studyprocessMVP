@@ -106,8 +106,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         }
         if (!Courses.Any())
         {
-            var course1 = new Course("Mathematics", "MATH101") { TeacherName = "Doctor" };
-            var course2 = new Course("History", "HIST101") { TeacherName = "Teacher" };
+            var course1 = new Course("Mathematics", "MATH101", DateTime.Today.AddMonths(-3), DateTime.Today.AddMonths(1)) { TeacherName = "Doctor" };
+            var course2 = new Course("History", "HIST101", DateTime.Today.AddMonths(-3), DateTime.Today.AddMonths(1)) { TeacherName = "Teacher" };
 
             Courses.AddRange(course1, course2);
             SaveChanges();

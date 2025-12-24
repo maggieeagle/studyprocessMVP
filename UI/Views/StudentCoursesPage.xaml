@@ -14,7 +14,34 @@
     </UserControl.Resources>
 
     <Grid Margin="10">
-        <DataGrid x:Name="CoursesGrid"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- filters -->
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBox Width="200"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     ToolTip="Search by Name"
+                     Margin="0,0,5,0"/>
+            <TextBox Width="120"
+                     Text="{Binding CourseCode, UpdateSourceTrigger=PropertyChanged}"
+                     ToolTip="Course Code"
+                     Margin="0,0,5,0"/>
+
+            <ComboBox Width="150"
+          SelectedItem="{Binding CourseStatus, UpdateSourceTrigger=PropertyChanged}"
+          Margin="0,0,5,0"
+          ItemsSource="{Binding CourseStatusValues}" />
+
+            <DatePicker SelectedDate="{Binding StartDate}" Width="120" Margin="0,0,5,0"/>
+            <DatePicker SelectedDate="{Binding EndDate}" Width="120" Margin="0,0,5,0"/>
+            <Button Content="Search"
+                    Command="{Binding LoadCoursesCommand}" Width="80"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Courses}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False">
@@ -38,7 +65,6 @@
                 <DataGridTextColumn Header="Code"
                                     Binding="{Binding Code}"
                                     Width="Auto" />
-
                 <DataGridCheckBoxColumn Header="Enrolled"
                         Binding="{Binding IsEnrolled}"
                         IsReadOnly="True"
@@ -74,8 +100,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-            </DataGrid.Columns>
-            
+            </DataGrid.Columns>            
         </DataGrid>
     </Grid>
 </UserControl>
