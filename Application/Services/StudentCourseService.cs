@@ -20,7 +20,7 @@ namespace Application.Services
             _students = studentRepo;
         }
 
-        public async Task<List<StudentCourseDTO>> GetAllCoursesWithEnrollmentStatusAsync(int studentId, string? searchText, string? courseCode, CourseStatus? statusFilter, DateTime? startDate, DateTime? endDate)
+        public async Task<List<StudentCourseDTO>> GetAllCoursesWithEnrollmentStatusAsync(int userId, string? searchText, string? courseCode, CourseStatus? statusFilter, DateTime? startDate, DateTime? endDate)
         {
             var result = new List<StudentCourseDTO>();
 
@@ -38,7 +38,7 @@ namespace Application.Services
                         CourseId = course.Id,
                         CourseName = course.Name,
                         Code = course.Code,
-                        IsEnrolled = false 
+                        IsEnrolled = false
                     });
                 }
                 return result;

@@ -2,9 +2,8 @@
 using Application.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Domain.Entities;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using static Domain.Entities.Course;
 
 namespace UI.ViewModels
 {

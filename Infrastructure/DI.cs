@@ -19,7 +19,7 @@ namespace Infrastructure
         public static IServiceCollection RegisterInfrastructure(this IServiceCollection services, string connectionString)
         {
             // Repositories
-            services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, new MySqlServerVersion(new Version(5, 7, 44))));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
