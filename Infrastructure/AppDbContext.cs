@@ -9,11 +9,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Student> Students { get; set; }
+    public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Course> Courses { get; set; }
     public DbSet<Enrollment> Enrollments { get; set; }
     public DbSet<Assignment> Assignments { get; set; }
     public DbSet<HomeworkAssignment> HomeworkAssignments { get; set; }
     public DbSet<ExamAssignment> ExamAssignments { get; set; }
+    public DbSet<Submission> Submissions { get; set; }
 
     public class EmailConverter() : ValueConverter<Email, string>(
         v => v.Value,
@@ -82,6 +84,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Course>()
            .HasIndex(c => c.Code)
            .IsUnique();
+
+        modelBuilder.Entity<Submission>()
+            .HasOne(s => s.Assignment)
+            .WithMany()
+            .HasForeignKey(s => s.AssignmentId);
     }
 
 
@@ -99,11 +106,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         }
         if (!Courses.Any())
         {
-            var course1 = new Course("Mathematics", "MATH101", DateTime.Today.AddMonths(-3), DateTime.Today.AddMonths(1));
-            var course2 = new Course("History", "HIST101", DateTime.Today.AddMonths(-3), DateTime.Today.AddMonths(1));
+            var course1 = new Course("Mathematics", "MATH101", DateTime.Today.AddMonths(-3), DateTime.Today.AddMonths(1)) { TeacherName = "Doctor" };
+            var course2 = new Course("History", "HIST101", DateTime.Today.AddMonths(-3), DateTime.Today.AddMonths(1)) { TeacherName = "Teacher" };
 
             Courses.AddRange(course1, course2);
             SaveChanges();
+
+            if (!HomeworkAssignments.Any())
+            {
+                var assignment1 = new HomeworkAssignment("Algebra Quiz", "-", DateTime.Now.AddDays(-2), course1, 10);
+                var assignment2 = new HomeworkAssignment("Final Project", "-", DateTime.Now.AddDays(-2), course1, 10);
+                var assignment3 = new ExamAssignment("Calculus Exam", "-", DateTime.Now.AddDays(2), course2, DateTime.Now.AddDays(2));
+
+                Assignments.AddRange(assignment1, assignment2, assignment3);
+                SaveChanges();
+            }
         }
     }
 }

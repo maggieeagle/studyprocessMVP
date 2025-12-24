@@ -3,9 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:helpers="clr-namespace:UI.Helpers"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <helpers:BindingProxy x:Key="VmProxy" Data="{Binding}" />
+    </UserControl.Resources>
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -41,31 +47,51 @@
                   CanUserAddRows="False">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Course Name"
-                                    Binding="{Binding CourseName}"
-                                    Width="*" />
+
+                <DataGridTemplateColumn Header="Course Name" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock VerticalAlignment="Center">
+                                <Hyperlink Command="{Binding DataContext.NavigateToCourseCommand,
+                                                     RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                           CommandParameter="{Binding}">
+                                    <TextBlock Text="{Binding CourseName}" />
+                                </Hyperlink>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
                 <DataGridTextColumn Header="Code"
                                     Binding="{Binding Code}"
                                     Width="Auto" />
                 <DataGridCheckBoxColumn Header="Enrolled"
-                                        Binding="{Binding IsEnrolled}"
-                                        IsReadOnly="True"
-                                        Width="Auto" />
+                        Binding="{Binding IsEnrolled}"
+                        IsReadOnly="True"
+                        Width="Auto"
+                        Visibility="{Binding Data.IsStudent,
+                                     Source={StaticResource VmProxy},
+                                     Converter={StaticResource BoolToVis}}" />
+
                 <DataGridTemplateColumn Header="Action"
-                                        Width="Auto">
+                        Width="Auto"
+                        Visibility="{Binding Data.IsStudent,
+                                     Source={StaticResource VmProxy},
+                                     Converter={StaticResource BoolToVis}}">
+
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Command="{Binding DataContext.EnrollCommand,
-                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
                                     CommandParameter="{Binding}">
                                 <Button.Style>
                                     <Style TargetType="Button">
-                                        <Setter Property="Content" Value="Enroll"/>
-                                        <Setter Property="IsEnabled" Value="True"/>
+                                        <Setter Property="Content" Value="Enroll" />
+                                        <Setter Property="IsEnabled" Value="True" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsEnrolled}" Value="True">
-                                                <Setter Property="Content" Value="Enrolled"/>
-                                                <Setter Property="IsEnabled" Value="False"/>
+                                                <Setter Property="Content" Value="Enrolled" />
+                                                <Setter Property="IsEnabled" Value="False" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -74,7 +100,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-            </DataGrid.Columns>
+            </DataGrid.Columns>            
         </DataGrid>
     </Grid>
 </UserControl>

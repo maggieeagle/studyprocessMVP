@@ -1,0 +1,155 @@
+﻿<UserControl x:Class="UI.Views.CoursePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:helpers="clr-namespace:UI.Helpers"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <helpers:BindingProxy x:Key="VmProxy" Data="{Binding}" />
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Grid.Row="0" 
+            Content="← Back to Menu" 
+            Command="{Binding GoBackCommand}"
+            HorizontalAlignment="Left"
+            Margin="0,0,0,15"
+            Cursor="Hand"
+            FontWeight="SemiBold"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,5">
+            <TextBlock Text="{Binding CourseName}" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       Margin="0,0,10,0"/>
+            <TextBlock Text="{Binding Code}" 
+                       FontSize="24" 
+                       Foreground="Gray"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,20">
+            <TextBlock Text="Teacher: " 
+                       FontWeight="SemiBold" 
+                       FontSize="14"/>
+            <TextBlock Text="{Binding TeacherName}" 
+                       FontSize="14"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="3" 
+                  ItemsSource="{Binding Assignments}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Assignment Name" 
+                                    Binding="{Binding Name}" 
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Type" 
+                                    Binding="{Binding Type}" 
+                                    Width="Auto"/>
+
+                <DataGridTextColumn Header="Due Date" 
+                                    Binding="{Binding DueDate, StringFormat=d}" 
+                                    Width="Auto"/>
+
+                <DataGridTextColumn Header="Status" 
+                                    Binding="{Binding Status}" 
+                                    Width="Auto">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Status}" Value="Overdue">
+                                    <Setter Property="Foreground" Value="Red"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Status}" Value="Submitted">
+                                    <Setter Property="Foreground" Value="Green"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTemplateColumn Header="Action" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Padding="10,2"
+                    CommandParameter="{Binding}">
+
+                                <Button.Style>
+                                    <Style TargetType="Button">
+
+                                        <!-- Default: Student -->
+                                        <Setter Property="Content" Value="Submit"/>
+                                        <Setter Property="Command"
+                                Value="{Binding DataContext.OpenSubmitWindowCommand,
+                                RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
+                                        <Style.Triggers>
+
+                                            <!-- Disable submit for students -->
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding Status}" Value="Submitted"/>
+                                                    <Condition Binding="{Binding Data.IsStudent,
+                                        Source={StaticResource VmProxy}}" Value="True"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </MultiDataTrigger>
+
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding Status}" Value="Overdue"/>
+                                                    <Condition Binding="{Binding Data.IsStudent,
+                                        Source={StaticResource VmProxy}}" Value="True"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </MultiDataTrigger>
+
+                                            <!-- Teacher behavior -->
+                                            <DataTrigger Binding="{Binding Data.IsTeacher,
+                                Source={StaticResource VmProxy}}" Value="True">
+                                                <Setter Property="Content" Value="View Submissions"/>
+                                                <Setter Property="IsEnabled" Value="True"/>
+                                                <Setter Property="Command"
+                                        Value="{Binding DataContext.OpenViewSubmissionsWindowCommand,
+                                        RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Grade" 
+                                    Binding="{Binding Grade}" 
+                                    Width="Auto"
+                                    IsReadOnly="True"
+                                    Visibility="{Binding Data.IsStudent, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Content="+ Add Assignment" 
+        Command="{Binding OpenAddAssignmentWindowCommand}"
+        Visibility="{Binding Data.IsTeacher, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}"
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Top"
+        Grid.Row="2"
+        Margin="0,-40,0,0"
+        Padding="10,5"/>
+    </Grid>
+</UserControl>

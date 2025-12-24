@@ -4,15 +4,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.Entities;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using static Domain.Entities.Course;
 
 namespace UI.ViewModels
 {
     public partial class StudentCoursesViewModel : ObservableObject
     {
         private readonly IStudentCourseService _studentCourseService;
-        private readonly int _studentId; // Current logged-in student
+        private readonly INavigationService _navigationService;
+        private readonly IAuthService _authService;
 
         public Array CourseStatusValues => Enum.GetValues(typeof(Course.CourseStatus));
 
@@ -20,6 +19,10 @@ namespace UI.ViewModels
         private ObservableCollection<StudentCourseDTO> _courses = new();
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsStudent))]
+        private bool _isTeacher;
+
+        public bool IsStudent => !IsTeacher;
         private string? _searchText;
 
         [ObservableProperty]
@@ -34,11 +37,15 @@ namespace UI.ViewModels
         [ObservableProperty]
         private Course.CourseStatus? _courseStatus = Course.CourseStatus.Available;
 
-
-        public StudentCoursesViewModel(IStudentCourseService studentCourseService, int studentId)
+        public StudentCoursesViewModel(INavigationService navigationService, IStudentCourseService studentCourseService, IAuthService authService)
         {
+            _navigationService = navigationService;
             _studentCourseService = studentCourseService;
-            _studentId = studentId;
+            _authService = authService;
+
+            _authService.StateChanged += OnAuthStateChanged;
+
+            UpdateRole();
 
             LoadCoursesCommand = new AsyncRelayCommand(LoadCoursesAsync);
             EnrollCommand = new AsyncRelayCommand<StudentCourseDTO>(EnrollAsync);
@@ -46,24 +53,46 @@ namespace UI.ViewModels
             _ = LoadCoursesAsync();
         }
 
+        private void UpdateRole()
+        {
+            var roles = _authService.GetCurrentUserRoles();
+            IsTeacher = roles.Contains("Teacher");
+        }
+
+        private void OnAuthStateChanged()
+        {
+            UpdateRole();
+        }
+
         public IAsyncRelayCommand LoadCoursesCommand { get; }
         public IAsyncRelayCommand<StudentCourseDTO> EnrollCommand { get; }
 
         private async Task LoadCoursesAsync()
         {
-            var list = await _studentCourseService.GetAllCoursesWithEnrollmentStatusAsync(_studentId, _searchText, _courseCode, _courseStatus, _startDate, _endDate);
+            int currentId = _authService.GetCurrentUserId();
+
+            var list = await _studentCourseService.GetAllCoursesWithEnrollmentStatusAsync(currentId, _searchText, _courseCode, _courseStatus, _startDate, _endDate);
             Courses = new ObservableCollection<StudentCourseDTO>(list);
         }
 
         private async Task EnrollAsync(StudentCourseDTO courseDto)
         {
-            if (courseDto.IsEnrolled) return; // Already enrolled
+            if (courseDto == null || courseDto.IsEnrolled) return;
 
-            await _studentCourseService.Enroll(_studentId, courseDto.CourseId);
-            courseDto.IsEnrolled = true;
+            await _studentCourseService.Enroll(
+                _authService.GetCurrentUserId(),
+                courseDto.CourseId);
 
             await LoadCoursesAsync();
         }
 
+        [RelayCommand]
+        private void NavigateToCourse(StudentCourseDTO course)
+        {
+            if (course != null)
+            {
+                _navigationService.NavigateToCourseDetails(course.CourseId);
+            }
+        }
     }
 }

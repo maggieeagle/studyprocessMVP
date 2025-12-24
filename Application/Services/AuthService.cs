@@ -73,5 +73,11 @@ namespace Application.Services
             var user = _users.GetByEmail(_currentUser ?? "");
             return user?.Id ?? 0;
         }
+
+        public string[] GetCurrentUserRoles()
+        {
+            var user = _users.GetByEmail(_currentUser ?? "");
+            return user?.Roles?.ToArray() ?? Array.Empty<string>();
+        }
     }
 }

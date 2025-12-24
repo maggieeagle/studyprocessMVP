@@ -15,6 +15,11 @@ namespace Domain.Entities
 
         public string Name { get; private set; }
         public string Code { get; private set; }
+        public string TeacherName { get; set; }
+
+        public int? TeacherId { get; set; }
+        public Teacher? Teacher { get; set; }
+
         public CourseStatus Status { get; private set; }
         public DateTime StartDate { get; private set; }
         public DateTime EndDate { get; private set; }

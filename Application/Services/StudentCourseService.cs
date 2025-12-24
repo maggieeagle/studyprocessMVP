@@ -20,15 +20,33 @@ namespace Application.Services
             _students = studentRepo;
         }
 
-        public async Task<List<StudentCourseDTO>> GetAllCoursesWithEnrollmentStatusAsync(int studentId, string? searchText, string? courseCode, CourseStatus? statusFilter, DateTime? startDate, DateTime? endDate)
+        public async Task<List<StudentCourseDTO>> GetAllCoursesWithEnrollmentStatusAsync(int userId, string? searchText, string? courseCode, CourseStatus? statusFilter, DateTime? startDate, DateTime? endDate)
         {
             var result = new List<StudentCourseDTO>();
 
             // TODO: change for SQL query?
             var allCourses = await _courses.GetAllAsync();
-            var student = await _students.GetById(studentId);
+
+            bool isTeacher = await _courses.IsTeacherAsync(userId);
+
+            if (isTeacher)
+            {
+                foreach (var course in allCourses)
+                {
+                    result.Add(new StudentCourseDTO
+                    {
+                        CourseId = course.Id,
+                        CourseName = course.Name,
+                        Code = course.Code,
+                        IsEnrolled = false
+                    });
+                }
+                return result;
+            }
+
+            var student = await _students.GetById(userId);
             if (student == null)
-                throw new Exception("Student not found");
+                throw new Exception("Student profile not found for this user.");
 
             var enrolledCourseIds = new HashSet<int>(student.Enrollments.Select(e => e.CourseId));
 
@@ -91,6 +109,5 @@ namespace Application.Services
                 await _students.Save(student);  // Save changes via repository
             }
         }
-
     }
 }
