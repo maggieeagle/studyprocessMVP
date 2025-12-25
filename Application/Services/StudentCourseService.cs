@@ -1,6 +1,7 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,10 +61,10 @@ namespace Application.Services
                     .Where(c => c.Code.Contains(courseCode))
                     .ToList();
 
-            if (statusFilter.HasValue)
-                allCourses = allCourses
-                    .Where(c => c.Status == statusFilter.Value)
-                    .ToList();
+           // if (statusFilter.HasValue)
+               // allCourses = allCourses
+                  //  .Where(c => c.Status == statusFilter.Value)
+                  //  .ToList();
 
             if (startDate.HasValue)
                 allCourses = allCourses
@@ -77,13 +78,32 @@ namespace Application.Services
 
             foreach (var course in allCourses)
             {
+                var isEnrolled = enrolledCourseIds.Contains(course.Id);
+
+                // calculate displaye status based on enrollment and dates
+                // available - not enrolled and end date in future
+                // enrolled - enrolled and end date in future
+                // completed - enrolled and end date in past
+                Course.CourseStatus displayedStatus;
+                if (!isEnrolled && course.EndDate >= DateTime.Today)
+                    displayedStatus = Course.CourseStatus.Available;
+                    else if (isEnrolled && course.EndDate < DateTime.Today)
+                    displayedStatus = Course.CourseStatus.Completed;
+                    else if (isEnrolled)
+                    displayedStatus = Course.CourseStatus.Enrolled;
+                    else
+                    displayedStatus = Course.CourseStatus.Available;
+
+                if (statusFilter.HasValue && displayedStatus != statusFilter.Value)
+                    continue;
+
                 result.Add(new StudentCourseDTO
                 {
                     CourseId = course.Id,
                     CourseName = course.Name,
                     Code = course.Code,
-                    IsEnrolled = enrolledCourseIds.Contains(course.Id),
-                    Status = course.Status,
+                    IsEnrolled = isEnrolled,
+                    DisplayedStatus = displayedStatus,
                     StartDate = course.StartDate,
                     EndDate = course.EndDate
                 });

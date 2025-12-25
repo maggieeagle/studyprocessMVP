@@ -13,8 +13,6 @@ namespace UI.ViewModels
         private readonly INavigationService _navigationService;
         private readonly IAuthService _authService;
 
-        public Array CourseStatusValues => Enum.GetValues(typeof(Course.CourseStatus));
-
         [ObservableProperty]
         private ObservableCollection<StudentCourseDTO> _courses = new();
 
@@ -35,7 +33,10 @@ namespace UI.ViewModels
         private DateTime? _endDate;
 
         [ObservableProperty]
-        private Course.CourseStatus? _courseStatus = Course.CourseStatus.Available;
+        private Course.CourseStatus? _courseStatus = null;
+
+        public IReadOnlyList<object> CourseStatusValues =>
+        new object[] { null, Course.CourseStatus.Available, Course.CourseStatus.Enrolled, Course.CourseStatus.Completed };
 
         public StudentCoursesViewModel(INavigationService navigationService, IStudentCourseService studentCourseService, IAuthService authService)
         {

@@ -36,6 +36,8 @@ namespace Domain.Entities
             Name = name.Trim();
             Code = code.Trim().ToUpperInvariant();
             Status = CourseStatus.Available;
+            StartDate = startDate;
+            EndDate = endDate;
         }
 
         public void AddAssignment(Assignment assignment)

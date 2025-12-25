@@ -11,7 +11,8 @@ namespace Domain.Entities
         public string Description { get; set; } = string.Empty;
         public DateTime DueDate { get; private set; }
         public int CourseId { get; private set; }
-        public Course Course { get; private set; } = null!;
+        public Course Course { get; private set; }
+        public ICollection<Submission> Submissions { get; protected set; } = new List<Submission>();
         public ICollection<Grade> Grades { get; private set; } = [];
 
         protected Assignment() { } // for EF core

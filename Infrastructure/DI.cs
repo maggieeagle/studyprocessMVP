@@ -29,6 +29,7 @@ namespace Infrastructure
             // Application services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IStudentCourseService, StudentCourseService>();
+            services.AddScoped<ICourseAssignmentsExportService, CourseAssignmentsExportService>();
 
             return services;
         }

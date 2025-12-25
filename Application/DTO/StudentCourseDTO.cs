@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using static Domain.Entities.Course;
@@ -17,6 +18,7 @@ namespace Application.DTO
         public string CourseName { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public bool IsEnrolled { get; set; }
+        public Course.CourseStatus DisplayedStatus { get; set; }
 
         public CourseStatus Status { get; set; }
         public DateTime StartDate { get; set; }

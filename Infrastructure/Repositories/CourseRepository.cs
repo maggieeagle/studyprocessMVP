@@ -22,6 +22,13 @@ namespace Infrastructure.Repositories
             return _context.Courses.FirstOrDefaultAsync(c => c.Id == id);
         }
 
+        public async Task<Course?> GetByIdWithAssignmentsAsync(int courseId)
+        {
+            return await _context.Courses
+                .Include(c => c.Assignments)   // include assignments
+                .FirstOrDefaultAsync(c => c.Id == courseId);
+        }
+
         public async Task<CourseDetailDTO?> GetCourseDetailsAsync(int courseId, int userId)
         {
             var isTeacher = await IsTeacherAsync(userId);

@@ -21,30 +21,46 @@
         </Grid.RowDefinitions>
 
         <Button Grid.Row="0" 
-            Content="← Back to Menu" 
-            Command="{Binding GoBackCommand}"
-            HorizontalAlignment="Left"
-            Margin="0,0,0,15"
-            Cursor="Hand"
-            FontWeight="SemiBold"/>
+                Content="← Back to Menu" 
+                Command="{Binding GoBackCommand}"
+                HorizontalAlignment="Left"
+                Margin="0,0,0,15"
+                Cursor="Hand"
+                FontWeight="SemiBold"/>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,5">
-            <TextBlock Text="{Binding CourseName}" 
-                       FontSize="24" 
-                       FontWeight="Bold" 
-                       Margin="0,0,10,0"/>
-            <TextBlock Text="{Binding Code}" 
-                       FontSize="24" 
-                       Foreground="Gray"/>
-        </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,20">
-            <TextBlock Text="Teacher: " 
-                       FontWeight="SemiBold" 
-                       FontSize="14"/>
-            <TextBlock Text="{Binding TeacherName}" 
-                       FontSize="14"/>
-        </StackPanel>
+        <!-- Row 2: Teacher info + buttons on the right -->
+        <Grid Grid.Row="2" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Teacher info on the left -->
+            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                <TextBlock Text="Teacher: " 
+                   FontWeight="SemiBold" 
+                   FontSize="14"/>
+                <TextBlock Text="{Binding TeacherName}" 
+                   FontSize="14"/>
+            </StackPanel>
+
+            <!-- Add Assignment + Export CSV buttons on the right -->
+            <StackPanel Orientation="Vertical"
+                Grid.Column="1"
+                HorizontalAlignment="Right">
+                <Button Content="+ Add Assignment" 
+                Command="{Binding OpenAddAssignmentWindowCommand}"
+                Visibility="{Binding Data.IsTeacher, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}"
+                Padding="10,5"
+                Margin="0,0,0,5"/>
+
+                <Button Content="Export Assignments CSV"
+                Command="{Binding ExportAssignmentsCsvCommand}"
+                Visibility="{Binding Data.IsTeacher, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}"/>
+            </StackPanel>
+        </Grid>
+
 
         <DataGrid Grid.Row="3" 
                   ItemsSource="{Binding Assignments}"
@@ -86,7 +102,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Padding="10,2"
-                    CommandParameter="{Binding}">
+                                    CommandParameter="{Binding}">
 
                                 <Button.Style>
                                     <Style TargetType="Button">
@@ -94,8 +110,8 @@
                                         <!-- Default: Student -->
                                         <Setter Property="Content" Value="Submit"/>
                                         <Setter Property="Command"
-                                Value="{Binding DataContext.OpenSubmitWindowCommand,
-                                RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                                Value="{Binding DataContext.OpenSubmitWindowCommand,
+                                                RelativeSource={RelativeSource AncestorType=UserControl}}"/>
 
                                         <Style.Triggers>
 
@@ -104,7 +120,7 @@
                                                 <MultiDataTrigger.Conditions>
                                                     <Condition Binding="{Binding Status}" Value="Submitted"/>
                                                     <Condition Binding="{Binding Data.IsStudent,
-                                        Source={StaticResource VmProxy}}" Value="True"/>
+                                                        Source={StaticResource VmProxy}}" Value="True"/>
                                                 </MultiDataTrigger.Conditions>
                                                 <Setter Property="IsEnabled" Value="False"/>
                                             </MultiDataTrigger>
@@ -113,19 +129,19 @@
                                                 <MultiDataTrigger.Conditions>
                                                     <Condition Binding="{Binding Status}" Value="Overdue"/>
                                                     <Condition Binding="{Binding Data.IsStudent,
-                                        Source={StaticResource VmProxy}}" Value="True"/>
+                                                        Source={StaticResource VmProxy}}" Value="True"/>
                                                 </MultiDataTrigger.Conditions>
                                                 <Setter Property="IsEnabled" Value="False"/>
                                             </MultiDataTrigger>
 
                                             <!-- Teacher behavior -->
                                             <DataTrigger Binding="{Binding Data.IsTeacher,
-                                Source={StaticResource VmProxy}}" Value="True">
+                                                        Source={StaticResource VmProxy}}" Value="True">
                                                 <Setter Property="Content" Value="View Submissions"/>
                                                 <Setter Property="IsEnabled" Value="True"/>
                                                 <Setter Property="Command"
-                                        Value="{Binding DataContext.OpenViewSubmissionsWindowCommand,
-                                        RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                                        Value="{Binding DataContext.OpenViewSubmissionsWindowCommand,
+                                                        RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -142,14 +158,5 @@
                                     Visibility="{Binding Data.IsStudent, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}"/>
             </DataGrid.Columns>
         </DataGrid>
-
-        <Button Content="+ Add Assignment" 
-        Command="{Binding OpenAddAssignmentWindowCommand}"
-        Visibility="{Binding Data.IsTeacher, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}"
-        HorizontalAlignment="Right" 
-        VerticalAlignment="Top"
-        Grid.Row="2"
-        Margin="0,-40,0,0"
-        Padding="10,5"/>
     </Grid>
 </UserControl>

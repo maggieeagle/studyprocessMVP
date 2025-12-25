@@ -2,6 +2,7 @@ using Domain.Entities;
 using Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
 
 namespace Infrastructure;
 
@@ -98,18 +99,25 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         if (!Users.Any())
         {
-            var user = new User(new Email("a@a.a"), "123");
-            user.CreateStudent("John", "Doe");
+            // create student
+            var user1 = new User(new Email("a@a.a"), "123");
+            user1.CreateStudent("John", "Doe");
 
-            Users.Add(user);
+            //create teacher
+            var user2 = new User(new Email("b@b.b"), "123");
+            user2.CreateStudent("Jane", "Doe");
+
+            Users.Add(user1);
+            Users.Add(user2);
             SaveChanges();
         }
         if (!Courses.Any())
         {
             var course1 = new Course("Mathematics", "MATH101", DateTime.Today.AddMonths(-3), DateTime.Today.AddMonths(1)) { TeacherName = "Doctor" };
             var course2 = new Course("History", "HIST101", DateTime.Today.AddMonths(-3), DateTime.Today.AddMonths(1)) { TeacherName = "Teacher" };
+            var course3 = new Course("Physics", "PHYS101", DateTime.Today.AddMonths(-11), DateTime.Today.AddMonths(-6)) { TeacherName = "Doctor" };
 
-            Courses.AddRange(course1, course2);
+            Courses.AddRange(course1, course2, course3);
             SaveChanges();
 
             if (!HomeworkAssignments.Any())

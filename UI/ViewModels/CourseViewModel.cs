@@ -5,6 +5,8 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows;
 using UI.Views;
+using Microsoft.Win32;
+using System.IO;
 
 namespace UI.ViewModels
 {
@@ -13,6 +15,7 @@ namespace UI.ViewModels
         private readonly ICourseRepository _repository;
         private readonly IAuthService _authService;
         private readonly INavigationService _navigationService;
+        private readonly ICourseAssignmentsExportService _courseAssignmentsExportService;
         private readonly int _courseId;
 
         [ObservableProperty]
@@ -32,16 +35,22 @@ namespace UI.ViewModels
 
         public ObservableCollection<AssignmentDTO> Assignments { get; } = new();
 
+        public IAsyncRelayCommand ExportAssignmentsCsvCommand { get; }
+        
         public CourseViewModel(
             int courseId,
             ICourseRepository repository,
             IAuthService authService,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            ICourseAssignmentsExportService courseAssignmentsExportService)
         {
             _courseId = courseId;
             _repository = repository;
             _authService = authService;
             _navigationService = navigationService;
+            _courseAssignmentsExportService = courseAssignmentsExportService;
+
+            ExportAssignmentsCsvCommand = new AsyncRelayCommand(ExportAssignmentsCsvAsync);
 
             LoadCourseDetailsAsync();
         }
@@ -118,6 +127,35 @@ namespace UI.ViewModels
         private void GoBack()
         {
             _navigationService.NavigateToStudentCourses();
+        }
+
+        private async Task ExportAssignmentsCsvAsync()
+        {
+            try
+            {
+                // Get DTOs from Application service
+                var exportData = await _courseAssignmentsExportService.GetAssignmentsForCourseAsync(_courseId);
+
+                // Convert to CSV string
+                var csv = _courseAssignmentsExportService.ToCsv(exportData);
+
+                // Ask teacher where to save
+                var dlg = new SaveFileDialog
+                {
+                    Filter = "CSV Files (*.csv)|*.csv",
+                    FileName = $"{CourseName}_Assignments.csv"
+                };
+
+                if (dlg.ShowDialog() == true)
+                {
+                    await File.WriteAllTextAsync(dlg.FileName, csv);
+                    MessageBox.Show("CSV exported successfully!");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to export CSV: {ex.Message}");
+            }
         }
     }
 }

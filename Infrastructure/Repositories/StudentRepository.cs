@@ -22,6 +22,7 @@ namespace Infrastructure.Repositories
         public Task<List<int>> GetEnrolledCourseIds(int studentId)
         {
             return _context.Enrollments
+                .AsNoTracking()
                 .Where(e => e.StudentId == studentId)
                 .Select(e => e.CourseId)
                 .ToListAsync();

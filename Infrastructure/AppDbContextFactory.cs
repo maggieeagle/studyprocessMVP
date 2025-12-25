@@ -13,8 +13,8 @@ namespace Infrastructure
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 
-            // Use your database provider here, e.g., LocalDB or SQLite
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=StudyProcessMVP;Trusted_Connection=True;\r\n");
+            // Use your database provider here, e.g. LocalDB or SQLite
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MyProjectDb;Integrated Security=True;Connect Timeout=30;");
 
             return new AppDbContext(optionsBuilder.Options);
         }

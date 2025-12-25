@@ -32,7 +32,8 @@ namespace UI
                     courseId,
                     sp.GetRequiredService<ICourseRepository>(),
                     sp.GetRequiredService<IAuthService>(),
-                    sp.GetRequiredService<INavigationService>()
+                    sp.GetRequiredService<INavigationService>(),
+                    sp.GetRequiredService<ICourseAssignmentsExportService>()
                 );
             });
 
