@@ -157,5 +157,31 @@ namespace UI.ViewModels
                 MessageBox.Show($"Failed to export CSV: {ex.Message}");
             }
         }
+
+        [RelayCommand]
+        private async Task DeleteAssignment(AssignmentDTO assignment)
+        {
+            if (assignment == null) return;
+
+            var result = MessageBox.Show(
+                $"Are you sure you want to delete '{assignment.Name}'? This cannot be undone.",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    await _repository.DeleteAssignmentAsync(assignment.Id);
+                    Assignments.Remove(assignment);
+                    MessageBox.Show("Assignment deleted successfully.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error deleting assignment: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
     }
 }

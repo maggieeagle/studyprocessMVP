@@ -73,20 +73,39 @@
                             CornerRadius="16" 
                             Padding="10,6" 
                             Margin="0,0,12,0">
-                        <StackPanel Orientation="Horizontal">
-                            <Ellipse Width="26" Height="26" Margin="0,0,8,0">
-                                <Ellipse.Fill>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                        <GradientStop Color="{StaticResource PrimaryColor}" Offset="0"/>
-                                        <GradientStop Color="{StaticResource SecondaryColor}" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Ellipse.Fill>
-                            </Ellipse>
-                            <TextBlock Text="{Binding Username}" 
-                                       Foreground="{StaticResource TextPrimaryBrush}"
-                                       FontWeight="Medium"
-                                       FontSize="13"
-                                       VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button Command="{Binding OpenProfileCommand}" 
+                                    Background="Transparent" 
+                                    BorderThickness="0" 
+                                    Padding="0" 
+                                    Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <ContentPresenter />
+                                    </ControlTemplate>
+                                </Button.Template>
+
+                                <Border Background="{StaticResource SurfaceLightBrush}" 
+                                        CornerRadius="16" 
+                                        Padding="10,6" 
+                                        Margin="0,0,12,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Ellipse Width="26" Height="26" Margin="0,0,8,0">
+                                            <Ellipse.Fill>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="{StaticResource PrimaryColor}" Offset="0"/>
+                                                    <GradientStop Color="{StaticResource SecondaryColor}" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <TextBlock Text="{Binding Username}" 
+                           Foreground="{StaticResource TextPrimaryBrush}"
+                           FontWeight="Medium"
+                           FontSize="13"
+                           VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </Button>
                         </StackPanel>
                     </Border>
 

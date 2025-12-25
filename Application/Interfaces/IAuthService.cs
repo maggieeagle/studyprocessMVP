@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Domain.Entities;
 
 namespace Application.Interfaces
 {
@@ -10,7 +11,9 @@ namespace Application.Interfaces
         int GetCurrentUserId();
         string[] GetCurrentUserRoles();
         string GetCurrentUsername();
-
+        User? GetCurrentUser();
+        bool UpdateProfile(string firstName, string lastName, string? newPassword);
+        bool DeleteCurrentAccount();
         event Action StateChanged;
     }
 }

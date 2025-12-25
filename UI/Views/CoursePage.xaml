@@ -50,14 +50,14 @@
                 Grid.Column="1"
                 HorizontalAlignment="Right">
                 <Button Content="+ Add Assignment" 
-                Command="{Binding OpenAddAssignmentWindowCommand}"
-                Visibility="{Binding Data.IsTeacher, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}"
-                Padding="10,5"
-                Margin="0,0,0,5"/>
+                        Command="{Binding OpenAddAssignmentWindowCommand}"
+                        Visibility="{Binding Data.IsTeacher, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}"
+                        Padding="10,5"
+                        Margin="0,0,0,5"/>
 
                 <Button Content="Export Assignments CSV"
-                Command="{Binding ExportAssignmentsCsvCommand}"
-                Visibility="{Binding Data.IsTeacher, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}"/>
+                        Command="{Binding ExportAssignmentsCsvCommand}"
+                        Visibility="{Binding Data.IsTeacher, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}"/>
             </StackPanel>
         </Grid>
 
@@ -156,6 +156,21 @@
                                     Width="Auto"
                                     IsReadOnly="True"
                                     Visibility="{Binding Data.IsStudent, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}"/>
+                <DataGridTemplateColumn Width="Auto" 
+                                        Visibility="{Binding Data.IsTeacher, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="🗑" 
+                                    ToolTip="Delete Assignment"
+                                    Background="#FFDDDD"
+                                    Foreground="Red"
+                                    BorderBrush="Red"
+                                    Padding="8,2"
+                                    Command="{Binding Data.DeleteAssignmentCommand, Source={StaticResource VmProxy}}" 
+                                    CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

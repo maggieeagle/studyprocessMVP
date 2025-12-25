@@ -163,6 +163,11 @@ namespace Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
         }
-
+        public async Task DeleteAssignmentAsync(int assignmentId)
+        {
+            await _context.Assignments
+                    .Where(a => a.Id == assignmentId)
+                    .ExecuteDeleteAsync();
+        }
     }
 }
