@@ -106,7 +106,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             //create teacher
             var user2 = new User(new Email("b@b.b"), "123");
-            user2.CreateStudent("Jane", "Doe");
+            user2.CreateTeacher("Jane", "Doe");
 
             Users.Add(user1);
             Users.Add(user2);
