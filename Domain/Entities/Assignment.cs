@@ -49,5 +49,11 @@ namespace Domain.Entities
             if (DateTime.UtcNow > DueDate) throw new InvalidOperationException("Cannot grade assignment after due date.");
             Grades.Add(grade);
         }
+
+        public void UpdateInfo(string title, DateTime dueDate)
+        {
+            Title = title;
+            DueDate = dueDate;
+        }
     }
 }

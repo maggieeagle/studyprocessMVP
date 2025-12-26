@@ -15,5 +15,7 @@ namespace Application.Interfaces
         Task<bool> IsTeacherAsync(int userId);
         Task<List<SubmissionDTO>> GetSubmissionsForAssignmentAsync(int assignmentId);
         Task SaveGradesAsync(List<SubmissionDTO> submissions);
+        Task DeleteAssignmentAsync(int assignmentId);
+        Task UpdateAssignmentAsync(int id, AssignmentDTO dto);
     }
 }

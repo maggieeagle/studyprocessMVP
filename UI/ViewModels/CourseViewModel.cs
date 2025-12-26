@@ -36,7 +36,7 @@ namespace UI.ViewModels
         public ObservableCollection<AssignmentDTO> Assignments { get; } = new();
 
         public IAsyncRelayCommand ExportAssignmentsCsvCommand { get; }
-        
+
         public CourseViewModel(
             int courseId,
             ICourseRepository repository,
@@ -155,6 +155,51 @@ namespace UI.ViewModels
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to export CSV: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private async Task DeleteAssignment(AssignmentDTO assignment)
+        {
+            if (assignment == null) return;
+
+            var result = MessageBox.Show(
+                $"Are you sure you want to delete '{assignment.Name}'? This cannot be undone.",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    await _repository.DeleteAssignmentAsync(assignment.Id);
+                    Assignments.Remove(assignment);
+                    MessageBox.Show("Assignment deleted successfully.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error deleting assignment: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async Task UpdateAssignment(AssignmentDTO assignment)
+        {
+            if (assignment == null || IsStudent) return;
+
+            try
+            {
+                await _repository.UpdateAssignmentAsync(assignment.Id, assignment);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save changes: {ex.Message}", "Sync Error",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
+
+                LoadCourseDetailsAsync();
             }
         }
     }

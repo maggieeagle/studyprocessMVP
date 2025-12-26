@@ -20,7 +20,11 @@
         </Grid.RowDefinitions>
 
         <!-- filters -->
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+        <StackPanel Orientation="Horizontal"
+            Margin="0,0,0,10"
+            Visibility="{Binding Data.IsStudent,
+                                 Source={StaticResource VmProxy},
+                                 Converter={StaticResource BoolToVis}}">
             <TextBox Width="200"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      ToolTip="Search by Name"
@@ -113,7 +117,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-            </DataGrid.Columns>            
+            </DataGrid.Columns>
         </DataGrid>
     </Grid>
 </UserControl>

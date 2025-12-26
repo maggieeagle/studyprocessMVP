@@ -55,5 +55,18 @@ namespace UI.ViewModels
         {
             _authService.SignOut();
         }
+
+        [RelayCommand]
+        private void OpenProfile()
+        {
+            var viewModel = Services.GetRequiredService<UserEditViewModel>();
+
+            var window = new UserEditWindow(viewModel)
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+
+            window.ShowDialog();
+        }
     }
 }
