@@ -54,6 +54,7 @@ namespace Infrastructure.Repositories
                     {
                         Id = a.Id,
                         Name = a.Title,
+                        Description = a.Description,
                         Type = a is HomeworkAssignment ? "Homework" :
                                a is ExamAssignment ? "Exam" : "General",
                         DueDate = a.DueDate,
@@ -168,6 +169,15 @@ namespace Infrastructure.Repositories
             await _context.Assignments
                     .Where(a => a.Id == assignmentId)
                     .ExecuteDeleteAsync();
+        }
+        public async Task UpdateAssignmentAsync(int id, AssignmentDTO dto)
+        {
+            var entity = await _context.Assignments.FindAsync(id);
+            if (entity != null)
+            {
+                entity.UpdateInfo(dto.Name, dto.DueDate);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

@@ -36,7 +36,7 @@ namespace UI.ViewModels
         public ObservableCollection<AssignmentDTO> Assignments { get; } = new();
 
         public IAsyncRelayCommand ExportAssignmentsCsvCommand { get; }
-        
+
         public CourseViewModel(
             int courseId,
             ICourseRepository repository,
@@ -181,6 +181,25 @@ namespace UI.ViewModels
                 {
                     MessageBox.Show($"Error deleting assignment: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+        }
+
+        [RelayCommand]
+        public async Task UpdateAssignment(AssignmentDTO assignment)
+        {
+            if (assignment == null || IsStudent) return;
+
+            try
+            {
+                await _repository.UpdateAssignmentAsync(assignment.Id, assignment);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save changes: {ex.Message}", "Sync Error",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
+
+                LoadCourseDetailsAsync();
             }
         }
     }

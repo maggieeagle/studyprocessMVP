@@ -16,5 +16,6 @@ namespace Application.Interfaces
         Task<List<SubmissionDTO>> GetSubmissionsForAssignmentAsync(int assignmentId);
         Task SaveGradesAsync(List<SubmissionDTO> submissions);
         Task DeleteAssignmentAsync(int assignmentId);
+        Task UpdateAssignmentAsync(int id, AssignmentDTO dto);
     }
 }
