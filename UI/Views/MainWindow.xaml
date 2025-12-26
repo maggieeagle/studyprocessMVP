@@ -4,10 +4,10 @@
         xmlns:vm="clr-namespace:UI.ViewModels"
         xmlns:views="clr-namespace:UI.Views"
         Title="StudyHub" 
-        Height="650" 
-        Width="1000"
-        MinHeight="550"
-        MinWidth="800"
+        Height="800" 
+        Width="1300"
+        MinHeight="700"
+        MinWidth="1100"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BackgroundGradientBrush}">
 
@@ -36,7 +36,7 @@
 
         <Border Grid.Row="0" 
                 Background="{StaticResource SurfaceBrush}" 
-                Padding="20,12"
+                Padding="24,14"
                 BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="0,0,0,1">
             <Border.Style>
@@ -60,37 +60,29 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="📚" FontSize="20" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="📚" FontSize="22" Margin="0,0,12,0" VerticalAlignment="Center"/>
                     <TextBlock Text="StudyHub" 
-                               FontSize="18" 
+                               FontSize="20" 
                                FontWeight="Bold" 
                                Foreground="{StaticResource TextPrimaryBrush}"
                                VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Border Background="{StaticResource SurfaceLightBrush}" 
-                            CornerRadius="16" 
-                            Padding="10,6" 
-                            Margin="0,0,12,0">
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Button Command="{Binding OpenProfileCommand}" 
-                                    Background="Transparent" 
-                                    BorderThickness="0" 
-                                    Padding="0" 
-                                    Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <ContentPresenter />
-                                    </ControlTemplate>
-                                </Button.Template>
-
-                                <Border Background="{StaticResource SurfaceLightBrush}" 
-                                        CornerRadius="16" 
-                                        Padding="10,6" 
-                                        Margin="0,0,12,0">
+                    <Button Command="{Binding OpenProfileCommand}" 
+                            Background="Transparent" 
+                            BorderThickness="0" 
+                            Padding="0" 
+                            Cursor="Hand"
+                            Margin="0,0,16,0">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="ProfileBorder"
+                                        Background="{StaticResource SurfaceLightBrush}" 
+                                        CornerRadius="20" 
+                                        Padding="6,6,14,6">
                                     <StackPanel Orientation="Horizontal">
-                                        <Ellipse Width="26" Height="26" Margin="0,0,8,0">
+                                        <Ellipse Width="28" Height="28" Margin="0,0,10,0">
                                             <Ellipse.Fill>
                                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                                     <GradientStop Color="{StaticResource PrimaryColor}" Offset="0"/>
@@ -98,21 +90,26 @@
                                                 </LinearGradientBrush>
                                             </Ellipse.Fill>
                                         </Ellipse>
-                                        <TextBlock Text="{Binding Username}" 
-                           Foreground="{StaticResource TextPrimaryBrush}"
-                           FontWeight="Medium"
-                           FontSize="13"
-                           VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding DataContext.Username, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                                   FontWeight="Medium"
+                                                   FontSize="13"
+                                                   VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
-                            </Button>
-                        </StackPanel>
-                    </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="ProfileBorder" Property="Background" Value="#3D4A5C"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
                     <Button Content="Sign Out" 
                             Command="{Binding SignOutCommand}"
                             Style="{StaticResource SecondaryButtonStyle}"
-                            Padding="14,8"
+                            Padding="16,8"
                             FontSize="12"/>
                 </StackPanel>
             </Grid>

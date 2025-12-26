@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using UI.Views;
 
 namespace UI.ViewModels
 {
@@ -76,13 +77,11 @@ namespace UI.ViewModels
             ErrorMessage = string.Empty;
             SuccessMessage = string.Empty;
 
-            var result = System.Windows.MessageBox.Show(
+            var confirmed = CustomMessageBox.ShowConfirm(
                 "Are you sure you want to permanently delete your account? This action cannot be undone.",
-                "Confirm Deletion",
-                System.Windows.MessageBoxButton.YesNo,
-                System.Windows.MessageBoxImage.Warning);
+                "Confirm Deletion");
 
-            if (result == System.Windows.MessageBoxResult.Yes)
+            if (confirmed)
             {
                 bool success = _authService.DeleteCurrentAccount();
 

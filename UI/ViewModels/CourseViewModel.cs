@@ -3,7 +3,6 @@ using Application.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.Windows;
 using UI.Views;
 using Microsoft.Win32;
 using System.IO;
@@ -87,7 +86,7 @@ namespace UI.ViewModels
                 await _repository.SubmitAssignmentAsync(currentUserId, assignment.Id, studentAnswer);
 
                 assignment.Status = "Submitted";
-                MessageBox.Show("Assignment submitted successfully!");
+                CustomMessageBox.ShowSuccess("Assignment submitted successfully!");
             }
         }
 
@@ -105,11 +104,11 @@ namespace UI.ViewModels
                     await _repository.AddAssignmentAsync(_courseId, newAssignment);
 
                     LoadCourseDetailsAsync();
-                    MessageBox.Show("Assignment added successfully!");
+                    CustomMessageBox.ShowSuccess("Assignment added successfully!");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error adding assignment: {ex.Message}");
+                    CustomMessageBox.ShowError($"Error adding assignment: {ex.Message}");
                 }
             }
         }
@@ -149,12 +148,12 @@ namespace UI.ViewModels
                 if (dlg.ShowDialog() == true)
                 {
                     await File.WriteAllTextAsync(dlg.FileName, csv);
-                    MessageBox.Show("CSV exported successfully!");
+                    CustomMessageBox.ShowSuccess("CSV exported successfully!");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to export CSV: {ex.Message}");
+                CustomMessageBox.ShowError($"Failed to export CSV: {ex.Message}");
             }
         }
 
@@ -163,23 +162,21 @@ namespace UI.ViewModels
         {
             if (assignment == null) return;
 
-            var result = MessageBox.Show(
+            var confirmed = CustomMessageBox.ShowConfirm(
                 $"Are you sure you want to delete '{assignment.Name}'? This cannot be undone.",
-                "Confirm Delete",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
+                "Confirm Delete");
 
-            if (result == MessageBoxResult.Yes)
+            if (confirmed)
             {
                 try
                 {
                     await _repository.DeleteAssignmentAsync(assignment.Id);
                     Assignments.Remove(assignment);
-                    MessageBox.Show("Assignment deleted successfully.");
+                    CustomMessageBox.ShowSuccess("Assignment deleted successfully.");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error deleting assignment: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CustomMessageBox.ShowError($"Error deleting assignment: {ex.Message}");
                 }
             }
         }
@@ -196,9 +193,7 @@ namespace UI.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to save changes: {ex.Message}", "Sync Error",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
-
+                CustomMessageBox.ShowError($"Failed to save changes: {ex.Message}", "Sync Error");
                 LoadCourseDetailsAsync();
             }
         }

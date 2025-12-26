@@ -13,12 +13,17 @@ namespace UI.Views
         public CoursePage()
         {
             InitializeComponent();
-            Loaded += CoursePage_Loaded;
+            DataContextChanged += CoursePage_DataContextChanged;
         }
 
-        private void CoursePage_Loaded(object sender, RoutedEventArgs e)
+        private void CoursePage_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (DataContext is CourseViewModel vm)
+            if (e.OldValue is CourseViewModel oldVm)
+            {
+                oldVm.PropertyChanged -= Vm_PropertyChanged;
+            }
+
+            if (e.NewValue is CourseViewModel vm)
             {
                 vm.PropertyChanged += Vm_PropertyChanged;
                 UpdateColumnVisibility(vm);
@@ -27,8 +32,7 @@ namespace UI.Views
 
         private void Vm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (sender is CourseViewModel vm &&
-                (e.PropertyName == nameof(vm.IsTeacher)))
+            if (sender is CourseViewModel vm && e.PropertyName == nameof(vm.IsTeacher))
             {
                 Dispatcher.Invoke(() => UpdateColumnVisibility(vm));
             }
@@ -36,16 +40,7 @@ namespace UI.Views
 
         private void UpdateColumnVisibility(CourseViewModel vm)
         {
-            var teacherVisibility = vm.IsTeacher
-                ? Visibility.Visible
-                : Visibility.Collapsed;
-
-            var studentVisibility = vm.IsTeacher
-                ? Visibility.Collapsed
-                : Visibility.Visible;
-
-            UpdateColumn.Visibility = teacherVisibility;
-            DeleteColumn.Visibility = teacherVisibility;
+            var studentVisibility = vm.IsTeacher ? Visibility.Collapsed : Visibility.Visible;
             GradeColumn.Visibility = studentVisibility;
         }
     }

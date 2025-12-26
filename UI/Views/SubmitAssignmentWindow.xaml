@@ -5,10 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UI.Views"
         mc:Ignorable="d"
-        Title="SubmitAssignmentWindow" Height="450" Width="800">
-    <StackPanel>
-        <TextBlock Text="Enter your answer below:" Margin="0,0,0,10" FontWeight="Bold"/>
-        <TextBox x:Name="AnswerBox" Height="150" TextWrapping="Wrap" AcceptsReturn="True"/>
-        <Button Content="Submit Answer" Click="Submit_Click" Margin="0,15,0,0" Padding="10,5"/>
-    </StackPanel>
+        Title="Submit Assignment" 
+        Height="580" Width="600"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BackgroundGradientBrush}"
+        ResizeMode="NoResize">
+
+    <Grid Margin="20">
+        <Border Style="{StaticResource CardStyle}"
+                Padding="24">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                    <TextBlock Text="📤" FontSize="32" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                    <TextBlock Text="Submit Your Answer" 
+                               Style="{StaticResource HeadingStyle}"
+                               FontSize="20"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,4"/>
+                    <TextBlock Text="Enter your response to the assignment below"
+                               Style="{StaticResource SubheadingStyle}"
+                               FontSize="13"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="Your Answer" Style="{StaticResource LabelStyle}"/>
+                    <TextBox x:Name="AnswerBox" 
+                             MinHeight="200"
+                             VerticalAlignment="Stretch"
+                             Style="{StaticResource MultilineTextBoxStyle}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Margin="0,16,0,0">
+                    <Button Content="Submit Answer" 
+                            Click="Submit_Click" 
+                            Style="{StaticResource SuccessButtonStyle}"
+                            Padding="24,12"/>
+                    <TextBlock Text="Make sure to review your answer before submitting"
+                               Style="{StaticResource SubheadingStyle}"
+                               FontSize="11"
+                               HorizontalAlignment="Center"
+                               Margin="0,10,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>

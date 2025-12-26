@@ -32,7 +32,8 @@ namespace UI.Views
             // Basic Validation
             if (string.IsNullOrWhiteSpace(TitleBox.Text))
             {
-                MessageBox.Show("Title is required."); return;
+                CustomMessageBox.ShowWarning("Title is required.");
+                return;
             }
 
             Result = new AddAssignmentDTO
