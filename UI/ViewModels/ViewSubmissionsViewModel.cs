@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows;
+using UI.Views;
 
 namespace UI.ViewModels
 {
@@ -40,14 +41,13 @@ namespace UI.ViewModels
             {
                 await _repository.SaveGradesAsync(Submissions.ToList());
 
-                MessageBox.Show("Grades saved successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-
+                CustomMessageBox.ShowSuccess("Grades saved successfully!");
                 window?.Close();
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Save Error: {ex}");
-                MessageBox.Show("Failed to save grades. Check the debug console.");
+                CustomMessageBox.ShowError("Failed to save grades. Check the debug console.");
             }
         }
     }

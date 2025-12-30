@@ -17,6 +17,7 @@ namespace UI
             services.AddSingleton<MainViewModel>();
             services.AddTransient<LoginViewModel>();
             services.AddTransient<RegisterViewModel>();
+            services.AddTransient<UserEditViewModel>();
             services.AddTransient<StudentCoursesViewModel>(sp =>
             {
                 return new StudentCoursesViewModel(

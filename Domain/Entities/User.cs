@@ -46,5 +46,12 @@ namespace Domain.Entities
                 Roles.Add(role);
             }
         }
+        public void UpdatePassword(string newPassword)
+        {
+            if (string.IsNullOrWhiteSpace(newPassword))
+                throw new ArgumentException("Password can't be empty.");
+
+            Password = newPassword;
+        }
     }
 }

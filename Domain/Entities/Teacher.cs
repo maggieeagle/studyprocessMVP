@@ -42,5 +42,14 @@ namespace Domain.Entities
             FirstName = firstName;
             LastName = lastName;
         }
+
+        public void UpdateName(string firstName, string lastName)
+        {
+            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
+                throw new ArgumentException("First and last names are required.");
+
+            FirstName = firstName;
+            LastName = lastName;
+        }
     }
 }

@@ -3,7 +3,6 @@ using Application.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.Windows;
 using UI.Views;
 using Microsoft.Win32;
 using System.IO;
@@ -36,7 +35,7 @@ namespace UI.ViewModels
         public ObservableCollection<AssignmentDTO> Assignments { get; } = new();
 
         public IAsyncRelayCommand ExportAssignmentsCsvCommand { get; }
-        
+
         public CourseViewModel(
             int courseId,
             ICourseRepository repository,
@@ -87,7 +86,7 @@ namespace UI.ViewModels
                 await _repository.SubmitAssignmentAsync(currentUserId, assignment.Id, studentAnswer);
 
                 assignment.Status = "Submitted";
-                MessageBox.Show("Assignment submitted successfully!");
+                CustomMessageBox.ShowSuccess("Assignment submitted successfully!");
             }
         }
 
@@ -105,11 +104,11 @@ namespace UI.ViewModels
                     await _repository.AddAssignmentAsync(_courseId, newAssignment);
 
                     LoadCourseDetailsAsync();
-                    MessageBox.Show("Assignment added successfully!");
+                    CustomMessageBox.ShowSuccess("Assignment added successfully!");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error adding assignment: {ex.Message}");
+                    CustomMessageBox.ShowError($"Error adding assignment: {ex.Message}");
                 }
             }
         }
@@ -149,12 +148,53 @@ namespace UI.ViewModels
                 if (dlg.ShowDialog() == true)
                 {
                     await File.WriteAllTextAsync(dlg.FileName, csv);
-                    MessageBox.Show("CSV exported successfully!");
+                    CustomMessageBox.ShowSuccess("CSV exported successfully!");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to export CSV: {ex.Message}");
+                CustomMessageBox.ShowError($"Failed to export CSV: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private async Task DeleteAssignment(AssignmentDTO assignment)
+        {
+            if (assignment == null) return;
+
+            var confirmed = CustomMessageBox.ShowConfirm(
+                $"Are you sure you want to delete '{assignment.Name}'? This cannot be undone.",
+                "Confirm Delete");
+
+            if (confirmed)
+            {
+                try
+                {
+                    await _repository.DeleteAssignmentAsync(assignment.Id);
+                    Assignments.Remove(assignment);
+                    CustomMessageBox.ShowSuccess("Assignment deleted successfully.");
+                }
+                catch (Exception ex)
+                {
+                    CustomMessageBox.ShowError($"Error deleting assignment: {ex.Message}");
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async Task UpdateAssignment(AssignmentDTO assignment)
+        {
+            if (assignment == null || IsStudent) return;
+
+            try
+            {
+                await _repository.UpdateAssignmentAsync(assignment.Id, assignment);
+
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.ShowError($"Failed to save changes: {ex.Message}", "Sync Error");
+                LoadCourseDetailsAsync();
             }
         }
     }

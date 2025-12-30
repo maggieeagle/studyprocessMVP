@@ -87,9 +87,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
            .IsUnique();
 
         modelBuilder.Entity<Submission>()
-            .HasOne(s => s.Assignment)
-            .WithMany(a => a.Submissions)
-            .HasForeignKey(s => s.AssignmentId);
+                .HasOne(s => s.Assignment)
+                .WithMany(a => a.Submissions)
+                .HasForeignKey(s => s.AssignmentId)
+                .OnDelete(DeleteBehavior.Cascade);
     }
 
 

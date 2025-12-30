@@ -39,7 +39,9 @@ namespace Application.Services
                         CourseId = course.Id,
                         CourseName = course.Name,
                         Code = course.Code,
-                        IsEnrolled = false
+                        IsEnrolled = false,
+                        StartDate = course.StartDate,
+                        EndDate = course.EndDate
                     });
                 }
                 return result;
