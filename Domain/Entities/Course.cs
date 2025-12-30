@@ -11,7 +11,8 @@ namespace Domain.Entities
         {
             Available,
             Enrolled,
-            Completed
+            Completed,
+            Passed
         }
 
         [Required]
@@ -45,9 +46,10 @@ namespace Domain.Entities
 
             Name = name.Trim();
             Code = code.Trim().ToUpperInvariant();
-            Status = CourseStatus.Available;
             StartDate = startDate;
             EndDate = endDate;
+
+            Status = CourseStatus.Available;
         }
 
         public void AddAssignment(Assignment assignment)
@@ -62,6 +64,9 @@ namespace Domain.Entities
 
         public void Enroll()
         {
+            if (IsFinished())
+                throw new DomainException("Cannot enroll in a finished course.");
+
             if (Status != CourseStatus.Available)
                 throw new DomainException("Only available courses can be enrolled.");
 
@@ -74,6 +79,11 @@ namespace Domain.Entities
                 throw new DomainException("Only enrolled courses can be completed.");
 
             Status = CourseStatus.Completed;
+        }
+
+        private bool IsFinished()
+        {
+            return DateTime.Now > EndDate;
         }
     }
 }

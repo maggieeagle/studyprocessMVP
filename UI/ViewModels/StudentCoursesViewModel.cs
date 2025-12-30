@@ -36,7 +36,14 @@ namespace UI.ViewModels
         private Course.CourseStatus? _courseStatus = null;
 
         public IReadOnlyList<object> CourseStatusValues =>
-        new object[] { null, Course.CourseStatus.Available, Course.CourseStatus.Enrolled, Course.CourseStatus.Completed };
+         new object[]
+         {
+            null, // All
+            Course.CourseStatus.Available,
+            Course.CourseStatus.Enrolled,
+            Course.CourseStatus.Completed,
+            Course.CourseStatus.Passed
+         };
 
         public StudentCoursesViewModel(INavigationService navigationService, IStudentCourseService studentCourseService, IAuthService authService)
         {
@@ -57,7 +64,7 @@ namespace UI.ViewModels
         private void UpdateRole()
         {
             var roles = _authService.GetCurrentUserRoles();
-            IsTeacher = roles.Contains("Teacher");
+            IsTeacher = roles.Contains(Resource1.Teacher);
         }
 
         private void OnAuthStateChanged()
@@ -78,7 +85,7 @@ namespace UI.ViewModels
 
         private async Task EnrollAsync(StudentCourseDTO courseDto)
         {
-            if (courseDto == null || courseDto.IsEnrolled) return;
+            if (courseDto == null || courseDto.IsEnrolled || !courseDto.CanEnroll) return;
 
             await _studentCourseService.Enroll(
                 _authService.GetCurrentUserId(),

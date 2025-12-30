@@ -1,7 +1,10 @@
 ﻿using Infrastructure;
+using Infrastructure.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System.Windows;
 using UI.Views;
 
@@ -20,7 +23,7 @@ namespace UI
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                .AddJsonFile(Resource1.AppSettingsFile, optional: false, reloadOnChange: true);
             
             Configuration = builder.Build();
 
@@ -45,7 +48,17 @@ namespace UI
         {
             var services = new ServiceCollection();
 
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            Log.Logger = LoggingConfiguration.CreateLogger();
+
+            services.AddLogging(builder =>
+            {
+                builder.ClearProviders();
+                builder.AddSerilog(Log.Logger);
+            });
+
+            Log.Logger.Information(Resource1.ApplicationStarted);
+
+            var connectionString = Configuration.GetConnectionString(Resource1.DefaultConnection);
 
             services.RegisterInfrastructure(connectionString);
             services.RegisterUI();

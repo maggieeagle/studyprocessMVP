@@ -11,7 +11,7 @@ namespace UI.ViewModels
         private readonly IAuthService _authService = authService;
 
         [ObservableProperty]
-        private string _username = "";
+        private string _username = string.Empty;
 
         [ObservableProperty]
         private object? _currentView;

@@ -41,13 +41,13 @@ namespace UI.ViewModels
             {
                 await _repository.SaveGradesAsync(Submissions.ToList());
 
-                CustomMessageBox.ShowSuccess("Grades saved successfully!");
+                CustomMessageBox.ShowSuccess(Resource1.GradesSaveSuccess);
                 window?.Close();
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Save Error: {ex}");
-                CustomMessageBox.ShowError("Failed to save grades. Check the debug console.");
+                System.Diagnostics.Debug.WriteLine(string.Format(Resource1.GradesSaveError, ex));
+                CustomMessageBox.ShowError(Resource1.GradesSaveFail);
             }
         }
     }

@@ -63,15 +63,19 @@
                     <StackPanel Margin="0,0,16,8">
                         <TextBlock Text="Status" Style="{StaticResource LabelStyle}" FontSize="11"/>
                         <ComboBox Width="140"
-                                  ItemsSource="{Binding CourseStatusValues}"
-                                  SelectedItem="{Binding CourseStatus, Mode=TwoWay}"
-                                  Style="{StaticResource BaseComboBoxStyle}">
+                          ItemsSource="{Binding CourseStatusValues}"
+                          SelectedItem="{Binding CourseStatus, Mode=TwoWay}"
+                          Style="{StaticResource BaseComboBoxStyle}">
+
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding FallbackValue=All}" Foreground="{StaticResource TextPrimaryBrush}"/>
+                                    <TextBlock
+                                        Text="{Binding Converter={StaticResource CourseStatusToTextConverter}}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
+
                         </ComboBox>
+
                     </StackPanel>
 
                     <StackPanel Margin="0,0,16,8">
@@ -183,17 +187,32 @@
                                     <TextBlock FontSize="11" FontWeight="Medium" HorizontalAlignment="Center">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
+                                                <!-- default -->
                                                 <Setter Property="Text" Value="Available"/>
                                                 <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsEnrolled}" Value="True">
+
+                                                    <DataTrigger Binding="{Binding DisplayedStatus}" Value="Enrolled">
                                                         <Setter Property="Text" Value="Enrolled"/>
                                                         <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
                                                     </DataTrigger>
+
+                                                    <DataTrigger Binding="{Binding DisplayedStatus}"  Value="Completed">
+                                                        <Setter Property="Text" Value="Completed"/>
+                                                        <Setter Property="Foreground" Value="{StaticResource InfoBrush}"/>
+                                                    </DataTrigger>
+
+                                                    <DataTrigger Binding="{Binding DisplayedStatus}" Value="Passed">
+                                                        <Setter Property="Text" Value="Passed"/>
+                                                        <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+                                                    </DataTrigger>
+
                                                 </Style.Triggers>
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
+
                                 </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -206,6 +225,7 @@
                             <DataTemplate>
                                 <Button Command="{Binding DataContext.EnrollCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding}"
+                                        IsEnabled="{Binding CanEnroll}"
                                         Padding="16,8"
                                         Margin="4,0">
                                     <Button.Style>

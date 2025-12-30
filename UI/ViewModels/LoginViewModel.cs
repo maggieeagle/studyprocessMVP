@@ -26,13 +26,13 @@ namespace UI.ViewModels
 
             if (string.IsNullOrWhiteSpace(Email))
             {
-                ErrorMessage = "Please enter your email address";
+                ErrorMessage = Resource1.LoginEmailError;
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(Password))
             {
-                ErrorMessage = "Please enter your password";
+                ErrorMessage = Resource1.LoginPasswordError;
                 return;
             }
 
@@ -42,7 +42,7 @@ namespace UI.ViewModels
 
             if (!success)
             {
-                ErrorMessage = "Invalid email or password. Please check your credentials and try again.";
+                ErrorMessage = Resource1.LoginInvalidCredentialsError;
             }
         }
 

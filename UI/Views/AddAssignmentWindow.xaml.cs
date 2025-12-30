@@ -32,7 +32,7 @@ namespace UI.Views
             // Basic Validation
             if (string.IsNullOrWhiteSpace(TitleBox.Text))
             {
-                CustomMessageBox.ShowWarning("Title is required.");
+                CustomMessageBox.ShowWarning(Resource1.TitleIsRequired);
                 return;
             }
 
@@ -40,7 +40,7 @@ namespace UI.Views
             {
                 Title = TitleBox.Text,
                 Description = DescBox.Text,
-                Type = TypeCombo.SelectedIndex == 0 ? "Homework" : "Exam",
+                Type = TypeCombo.SelectedIndex == 0 ? Resource1.Homework : Resource1.Exam,
                 DueDate = DueDatePicker.SelectedDate ?? DateTime.Now,
                 MaxPoints = int.TryParse(PointsBox.Text, out int p) ? p : 0,
                 ExamDate = ExamDatePicker.SelectedDate

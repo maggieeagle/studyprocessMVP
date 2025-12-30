@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="ApplicationStarted" xml:space="preserve">
+    <value>Application started</value>
+  </data>
+  <data name="AppSettingsFile" xml:space="preserve">
+    <value>appsettings.json</value>
+  </data>
+  <data name="AssignmentAddError" xml:space="preserve">
+    <value>Error adding assignment: {0}</value>
+  </data>
+  <data name="AssignmentAddSuccess" xml:space="preserve">
+    <value>Assignment added successfully!</value>
+  </data>
+  <data name="AssignmentDeleteConfirmation" xml:space="preserve">
+    <value>Are you sure you want to delete '{0}'? This cannot be undone.</value>
+  </data>
+  <data name="AssignmentDeleteError" xml:space="preserve">
+    <value>Error deleting assignment: {0}</value>
+  </data>
+  <data name="AssignmentDeleteSuccess" xml:space="preserve">
+    <value>Assignment deleted successfully.</value>
+  </data>
+  <data name="AssignmentSubmitSuccess" xml:space="preserve">
+    <value>Assignment submitted successfully!</value>
+  </data>
+  <data name="AssignmentUpdateFail" xml:space="preserve">
+    <value>Failed to save changes: {0}</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Confirm Delete</value>
+  </data>
+  <data name="ConfirmDeletion" xml:space="preserve">
+    <value>Confirm Deletion</value>
+  </data>
+  <data name="CSVExportError" xml:space="preserve">
+    <value>Failed to export CSV: {0}</value>
+  </data>
+  <data name="CSVExportSuccess" xml:space="preserve">
+    <value>CSV exported successfully!</value>
+  </data>
+  <data name="CSVFilename" xml:space="preserve">
+    <value>{0}_Assignments.csv</value>
+  </data>
+  <data name="CSVFilter" xml:space="preserve">
+    <value>CSV Files (*.csv)|*.csv</value>
+  </data>
+  <data name="DefaultConnection" xml:space="preserve">
+    <value>DefaultConnection</value>
+  </data>
+  <data name="EditUserFail" xml:space="preserve">
+    <value>Failed to update profile. Please try again.</value>
+  </data>
+  <data name="Exam" xml:space="preserve">
+    <value>Exam</value>
+  </data>
+  <data name="GradesSaveError" xml:space="preserve">
+    <value>Save Error: {0}</value>
+  </data>
+  <data name="GradesSaveFail" xml:space="preserve">
+    <value>Failed to save grades. Check the debug console.</value>
+  </data>
+  <data name="GradesSaveSuccess" xml:space="preserve">
+    <value>Grades saved successfully!</value>
+  </data>
+  <data name="Homework" xml:space="preserve">
+    <value>Homework</value>
+  </data>
+  <data name="IconBird" xml:space="preserve">
+    <value>✓</value>
+  </data>
+  <data name="IconCross" xml:space="preserve">
+    <value>✕</value>
+  </data>
+  <data name="IconDanger" xml:space="preserve">
+    <value>⚠</value>
+  </data>
+  <data name="IconInfo" xml:space="preserve">
+    <value>ℹ</value>
+  </data>
+  <data name="LoginEmailError" xml:space="preserve">
+    <value>Please enter your email address</value>
+  </data>
+  <data name="LoginInvalidCredentialsError" xml:space="preserve">
+    <value>Invalid email or password. Please check your credentials and try again.</value>
+  </data>
+  <data name="LoginPasswordError" xml:space="preserve">
+    <value>Please enter your password</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="RegisterEmailAddress" xml:space="preserve">
+    <value>Please enter your email address</value>
+  </data>
+  <data name="RegisterNameError" xml:space="preserve">
+    <value>Please enter your first and last name</value>
+  </data>
+  <data name="RegisterPasswordError" xml:space="preserve">
+    <value>Please enter a password</value>
+  </data>
+  <data name="RegisterRoleError" xml:space="preserve">
+    <value>Please select your role (Student or Teacher)</value>
+  </data>
+  <data name="RegistrationError" xml:space="preserve">
+    <value>Registration error: {0}</value>
+  </data>
+  <data name="RegistrationFailError" xml:space="preserve">
+    <value>Registration failed. This email may already be registered.</value>
+  </data>
+  <data name="RegistrationSuccess" xml:space="preserve">
+    <value>Account created successfully! Redirecting to login...</value>
+  </data>
+  <data name="Student" xml:space="preserve">
+    <value>Student</value>
+  </data>
+  <data name="Submitted" xml:space="preserve">
+    <value>Submitted</value>
+  </data>
+  <data name="SyncError" xml:space="preserve">
+    <value>Sync Error</value>
+  </data>
+  <data name="Teacher" xml:space="preserve">
+    <value>Teacher</value>
+  </data>
+  <data name="TitleIsRequired" xml:space="preserve">
+    <value>Title is required.</value>
+  </data>
+  <data name="UserDeleteConfirm" xml:space="preserve">
+    <value>Are you sure you want to permanently delete your account? This action cannot be undone.</value>
+  </data>
+  <data name="UserDeleteError" xml:space="preserve">
+    <value>Failed to delete account. Please try again later.</value>
+  </data>
+  <data name="UserDeleteSuccess" xml:space="preserve">
+    <value>Account deleted successfully. Logging out...</value>
+  </data>
+  <data name="UserEditNameError" xml:space="preserve">
+    <value>Name fields cannot be empty.</value>
+  </data>
+  <data name="UserEditSuccess" xml:space="preserve">
+    <value>Profile updated successfully!</value>
+  </data>
+</root>

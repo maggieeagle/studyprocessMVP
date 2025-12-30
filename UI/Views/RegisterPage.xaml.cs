@@ -16,7 +16,7 @@ namespace UI.Views
         {
             if (DataContext is RegisterViewModel vm)
             {
-                vm.Role = "Student";
+                vm.Role = Resource1.Student;
             }
         }
 
@@ -24,7 +24,7 @@ namespace UI.Views
         {
             if (DataContext is RegisterViewModel vm)
             {
-                vm.Role = StudentRadio.IsChecked == true ? "Student" : "Teacher";
+                vm.Role = StudentRadio.IsChecked == true ? Resource1.Student : Resource1.Teacher;
             }
         }
 

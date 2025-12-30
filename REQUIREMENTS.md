@@ -6,7 +6,7 @@ Te valite ise domeeni ja äriprotsessi.
 
 Peab sisaldama: vähemalt 
 - [x] 1 pärilushierarhia (nt Base → Derived1/Derived2), **: Assignment → Homework/Exam Assignment** 
-- [ ] vähemalt 2 Aggregate Root, 
+- [x] vähemalt 2 Aggregate Root,   **: Assignments view under Teacher account, Courses view under Student account**
 - [x] 1 töövoog/staatuseloogika (nt Draft → Done) **: Course statuses - Available → Enrolled → Completed**, 
 - [x] eksport (CSV). **: export of Assignments for Course for Teacher**
 
@@ -50,7 +50,7 @@ Keelatud: ainult "CRUD tabelitele" ilma domeenireegliteta.
 
 
 6) Funktsionaalsed must‑have
-- [ ] CRUD vähemalt kolmel põhientiteedil (sh derived-tüübid vormis). **: User - CRUD; Course - R; Assignment - CRUD**
+- [x] CRUD vähemalt kolmel põhientiteedil (sh derived-tüübid vormis). **: User - CRUD; Student/Teacher - CRUD, Assignment - CRUD**
 
 - [x] Otsing/filtrid (tekst + select + kuupäevavahemik). **: search/filters for courses under student account - text (course name/code), select (course status), course start-end date range**
 
@@ -60,9 +60,9 @@ Keelatud: ainult "CRUD tabelitele" ilma domeenireegliteta.
 
 - [x] Valideerimine: UI + domaini tasemel (FluentValidation/DataAnnotations).
 
-- [ ] Veahaldus: 
+- [x] Veahaldus: 
   - [x] kasutajale viisakad sõnumid; 
-  - [ ] logisse detailid.
+  - [x] logisse detailid. **\studyprocess\UI\bin\Debug\net10.0-windows\logs**
 
 
 
@@ -70,7 +70,7 @@ Keelatud: ainult "CRUD tabelitele" ilma domeenireegliteta.
 7) Mittefunktsionaalsed nõuded
 - [x] MVVM: ViewModelites pole andmebaasi loogikat; DI kasutusel.
 
-- [ ] SOLID: SRP, väiksed interface’id, Dependency Inversion igal tasemel.
+- [x] SOLID: SRP, väiksed interface’id, Dependency Inversion igal tasemel. **DI in Infrastructure and UI**
 
 - [x] Jõudlus: loetelud AsNoTracking(); vajadusel paging .
 
@@ -79,7 +79,7 @@ Keelatud: ainult "CRUD tabelitele" ilma domeenireegliteta.
 8) UI vaated (miinimum)
 - [x] Dashboard –  Peaaken
 
-- [ ] Master‑Detail vaade #1 (Aggregate A) – grid + detail + Add/Edit/Delete.
+- [x] Master‑Detail vaade #1 (Aggregate A) – grid + detail + Add/Edit/Delete.  **: Assignments view under Teacher account**
 
 - [x] Master‑Detail vaade #2 (Aggregate B) – grid + detail + filtrid. **: Courses view under Student account**
 
@@ -114,8 +114,8 @@ Solution/
 
   - [x] Aggregates)
 
-- [ ] App.Infrastructure (
+- [x] App.Infrastructure (
   - [x] EF, 
   - [x] Migrations, 
   - [x] Repositories, 
-  - [ ] Logging)
+  - [x] Logging)

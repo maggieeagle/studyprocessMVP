@@ -26,22 +26,22 @@ namespace UI.Views
             {
                 case MessageType.Success:
                     IconBorder.Background = new SolidColorBrush(Color.FromArgb(0x1A, 0x22, 0xC5, 0x5E));
-                    IconText.Text = "✓";
+                    IconText.Text = Resource1.IconBird;
                     IconText.Foreground = new SolidColorBrush(Color.FromRgb(0x22, 0xC5, 0x5E));
                     break;
                 case MessageType.Warning:
                     IconBorder.Background = new SolidColorBrush(Color.FromArgb(0x1A, 0xF5, 0x9E, 0x0B));
-                    IconText.Text = "⚠";
+                    IconText.Text = Resource1.IconDanger;
                     IconText.Foreground = new SolidColorBrush(Color.FromRgb(0xF5, 0x9E, 0x0B));
                     break;
                 case MessageType.Error:
                     IconBorder.Background = new SolidColorBrush(Color.FromArgb(0x1A, 0xEF, 0x44, 0x44));
-                    IconText.Text = "✕";
+                    IconText.Text = Resource1.IconCross;
                     IconText.Foreground = new SolidColorBrush(Color.FromRgb(0xEF, 0x44, 0x44));
                     break;
                 default:
                     IconBorder.Background = new SolidColorBrush(Color.FromArgb(0x1A, 0x63, 0x66, 0xF1));
-                    IconText.Text = "ℹ";
+                    IconText.Text = Resource1.IconInfo;
                     IconText.Foreground = new SolidColorBrush(Color.FromRgb(0x63, 0x66, 0xF1));
                     break;
             }

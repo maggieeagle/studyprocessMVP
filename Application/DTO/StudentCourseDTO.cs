@@ -10,7 +10,8 @@ namespace Application.DTO
     {
         Available,
         Enrolled,
-        Completed
+        Completed,
+        Passed
     }
     public class StudentCourseDTO
     {
@@ -20,11 +21,12 @@ namespace Application.DTO
         public bool IsEnrolled { get; set; }
         public Course.CourseStatus DisplayedStatus { get; set; }
 
-        public CourseStatus Status { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
         // Enrollment button available only if not enrolled yet
-        public bool CanEnroll => !IsEnrolled;
+        public bool CanEnroll => !IsEnrolled &&
+        DisplayedStatus == Course.CourseStatus.Available &&
+        DateTime.Now <= EndDate;
     }
 }

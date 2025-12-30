@@ -85,8 +85,8 @@ namespace UI.ViewModels
 
                 await _repository.SubmitAssignmentAsync(currentUserId, assignment.Id, studentAnswer);
 
-                assignment.Status = "Submitted";
-                CustomMessageBox.ShowSuccess("Assignment submitted successfully!");
+                assignment.Status = Resource1.Submitted;
+                CustomMessageBox.ShowSuccess(Resource1.AssignmentSubmitSuccess);
             }
         }
 
@@ -104,11 +104,11 @@ namespace UI.ViewModels
                     await _repository.AddAssignmentAsync(_courseId, newAssignment);
 
                     LoadCourseDetailsAsync();
-                    CustomMessageBox.ShowSuccess("Assignment added successfully!");
+                    CustomMessageBox.ShowSuccess(Resource1.AssignmentAddSuccess);
                 }
                 catch (Exception ex)
                 {
-                    CustomMessageBox.ShowError($"Error adding assignment: {ex.Message}");
+                    CustomMessageBox.ShowError(string.Format(Resource1.AssignmentAddError,ex.Message));
                 }
             }
         }
@@ -141,19 +141,19 @@ namespace UI.ViewModels
                 // Ask teacher where to save
                 var dlg = new SaveFileDialog
                 {
-                    Filter = "CSV Files (*.csv)|*.csv",
-                    FileName = $"{CourseName}_Assignments.csv"
+                    Filter = Resource1.CSVFilter,
+                    FileName = string.Format(Resource1.CSVFilename, CourseName)
                 };
 
                 if (dlg.ShowDialog() == true)
                 {
                     await File.WriteAllTextAsync(dlg.FileName, csv);
-                    CustomMessageBox.ShowSuccess("CSV exported successfully!");
+                    CustomMessageBox.ShowSuccess(Resource1.CSVExportSuccess);
                 }
             }
             catch (Exception ex)
             {
-                CustomMessageBox.ShowError($"Failed to export CSV: {ex.Message}");
+                CustomMessageBox.ShowError(string.Format(Resource1.CSVExportError, ex.Message));
             }
         }
 
@@ -163,8 +163,8 @@ namespace UI.ViewModels
             if (assignment == null) return;
 
             var confirmed = CustomMessageBox.ShowConfirm(
-                $"Are you sure you want to delete '{assignment.Name}'? This cannot be undone.",
-                "Confirm Delete");
+                string.Format(Resource1.AssignmentDeleteConfirmation, assignment.Name),
+                Resource1.ConfirmDelete);
 
             if (confirmed)
             {
@@ -172,11 +172,11 @@ namespace UI.ViewModels
                 {
                     await _repository.DeleteAssignmentAsync(assignment.Id);
                     Assignments.Remove(assignment);
-                    CustomMessageBox.ShowSuccess("Assignment deleted successfully.");
+                    CustomMessageBox.ShowSuccess(Resource1.AssignmentDeleteSuccess);
                 }
                 catch (Exception ex)
                 {
-                    CustomMessageBox.ShowError($"Error deleting assignment: {ex.Message}");
+                    CustomMessageBox.ShowError(string.Format(Resource1.AssignmentDeleteError, ex.Message));
                 }
             }
         }
@@ -193,7 +193,7 @@ namespace UI.ViewModels
             }
             catch (Exception ex)
             {
-                CustomMessageBox.ShowError($"Failed to save changes: {ex.Message}", "Sync Error");
+                CustomMessageBox.ShowError(string.Format(Resource1.AssignmentUpdateFail, ex.Message), Resource1.SyncError);
                 LoadCourseDetailsAsync();
             }
         }

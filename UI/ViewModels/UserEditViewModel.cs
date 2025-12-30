@@ -52,7 +52,7 @@ namespace UI.ViewModels
 
             if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName))
             {
-                ErrorMessage = "Name fields cannot be empty.";
+                ErrorMessage = Resource1.UserEditNameError;
                 return;
             }
 
@@ -60,14 +60,14 @@ namespace UI.ViewModels
 
             if (success)
             {
-                SuccessMessage = "Profile updated successfully!";
+                SuccessMessage = Resource1.UserEditSuccess;
                 // Brief delay so the user sees the success message before closing
                 await Task.Delay(1000);
                 OnRequestClose?.Invoke(this, EventArgs.Empty);
             }
             else
             {
-                ErrorMessage = "Failed to update profile. Please try again.";
+                ErrorMessage = Resource1.EditUserFail;
             }
         }
 
@@ -78,8 +78,8 @@ namespace UI.ViewModels
             SuccessMessage = string.Empty;
 
             var confirmed = CustomMessageBox.ShowConfirm(
-                "Are you sure you want to permanently delete your account? This action cannot be undone.",
-                "Confirm Deletion");
+                Resource1.UserDeleteConfirm,
+                Resource1.ConfirmDeletion);
 
             if (confirmed)
             {
@@ -87,7 +87,7 @@ namespace UI.ViewModels
 
                 if (success)
                 {
-                    SuccessMessage = "Account deleted successfully. Logging out...";
+                    SuccessMessage = Resource1.UserDeleteSuccess;
 
                     await Task.Delay(1500);
 
@@ -95,7 +95,7 @@ namespace UI.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "Failed to delete account. Please try again later.";
+                    ErrorMessage = Resource1.UserDeleteError;
                 }
             }
         }

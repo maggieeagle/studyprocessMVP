@@ -3,6 +3,7 @@ using Application.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Domain.ValueObjects;
+using UI.Views;
 
 namespace UI.ViewModels
 {
@@ -47,25 +48,25 @@ namespace UI.ViewModels
 
             if (string.IsNullOrWhiteSpace(Role))
             {
-                ErrorMessage = "Please select your role (Student or Teacher)";
+                ErrorMessage = Resource1.RegisterRoleError;
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName))
             {
-                ErrorMessage = "Please enter your first and last name";
+                ErrorMessage = Resource1.RegisterNameError;
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(EmailInput))
             {
-                ErrorMessage = "Please enter your email address";
+                ErrorMessage = Resource1.RegisterEmailAddress;
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(Password))
             {
-                ErrorMessage = "Please enter a password";
+                ErrorMessage = Resource1.RegisterPasswordError;
                 return;
             }
 
@@ -83,11 +84,11 @@ namespace UI.ViewModels
 
                 if (!success)
                 {
-                    ErrorMessage = "Registration failed. This email may already be registered.";
+                    ErrorMessage = Resource1.RegistrationFailError;
                 }
                 else
                 {
-                    SuccessMessage = "Account created successfully! Redirecting to login...";
+                    SuccessMessage = Resource1.RegistrationSuccess;
                     System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(
                         new Action(() => NavigateLogin()),
                         System.Windows.Threading.DispatcherPriority.Background);
@@ -95,7 +96,7 @@ namespace UI.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Registration error: {ex.Message}";
+                ErrorMessage = string.Format(Resource1.RegistrationError, ex.Message);
             }
         }
     }

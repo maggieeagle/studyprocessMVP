@@ -1,23 +1,38 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
 using Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Services
 {
-    public class AuthService(IUserRepository users) : IAuthService
+    public class AuthService : IAuthService
     {
-        private readonly IUserRepository _users = users;
+        private readonly IUserRepository _users;
         private static string? _currentUser;
 
         public event Action? StateChanged;
+
+        private ILogger<AuthService> _logger;
+
+        public AuthService(IUserRepository users, ILogger<AuthService> logger) 
+        {
+            _users = users;
+            _logger = logger;
+        }
 
         public bool Register(UserRegistrationDto details)
         {
             try
             {
+                _logger.LogInformation("Attempting to register user with email {Email}", details.Email.Value);
+
                 // Check if user already exists
                 if (_users.GetByEmail(details.Email.Value) != null)
+                {
+                    _logger.LogWarning("Registration failed: user with email {Email} already exists", details.Email.Value);
+
                     return false;
+                }
 
                 var user = new User(details.Email, details.Password);
                 user.AddRole(details.Role);
@@ -31,10 +46,15 @@ namespace Application.Services
                 }
 
                 _users.Add(user);
+
+                _logger.LogInformation("User registered successfully with email {Email}", details.Email.Value);
+
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Unexpected error during registration for email {Email}", details.Email.Value);
+
                 return false;
             }
         }
@@ -43,25 +63,41 @@ namespace Application.Services
         {
             try
             {
+                _logger.LogInformation("Sign-in attempt for email {Email}", details.Email);
+
                 var user = _users.GetByEmailAndPassword(
                     details.Email,
                     details.Password);
 
                 if (user == null)
+                {
+                    _logger.LogWarning("Sign-in failed for email {Email}", details.Email);
+
                     return false;
+                }
 
                 _currentUser = user.Email.Value;
                 StateChanged?.Invoke();
+
+                _logger.LogInformation("User signed in successfully: {Email}", user.Email.Value);
+
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Unexpected error during sign-in for email {Email}", details.Email);
+
                 return false;
             }
         }
 
         public void SignOut()
         {
+            if (_currentUser != null)
+            {
+                _logger.LogInformation("User signed out: {Email}", _currentUser);
+            }
+
             _currentUser = null;
             StateChanged?.Invoke();
         }
@@ -91,7 +127,11 @@ namespace Application.Services
             try
             {
                 var user = _users.GetByEmail(_currentUser ?? "");
-                if (user == null) return false;
+                if (user == null)
+                {
+                    _logger.LogWarning("Update profile failed: no user logged in");
+                    return false;
+                }
 
                 if (user.Student != null)
                     user.Student.UpdateName(firstName, lastName);
@@ -103,11 +143,15 @@ namespace Application.Services
 
                 _users.Update(user);
 
+                _logger.LogInformation("Profile updated for user {Email}", user.Email.Value);
+
                 StateChanged?.Invoke();
                 return true;
             }
             catch (Exception ex)
             {
+                _logger.LogError( ex, "Error updating profile for user {Email}", _currentUser);
+
                 System.Diagnostics.Debug.WriteLine($"Update Failed: {ex.Message}");
                 return false;
             }
@@ -118,16 +162,26 @@ namespace Application.Services
             try
             {
                 var user = GetCurrentUser();
-                if (user == null) return false;
+                if (user == null)
+                {
+                    _logger.LogWarning("Delete account failed: no user logged in");
+
+                    return false;
+                }
 
                 _users.Delete(user);
+
+                _logger.LogInformation("User account deleted: {Email}", user.Email.Value);
+
                 _currentUser = null;
 
                 StateChanged?.Invoke();
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error deleting account for user {Email}", _currentUser);
+
                 return false;
             }
         }

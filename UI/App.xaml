@@ -10,6 +10,7 @@
             </ResourceDictionary.MergedDictionaries>
             
             <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+            <converters:CourseStatusToTextConverter x:Key="CourseStatusToTextConverter" />
             <converters:StringToVisibilityConverter x:Key="StringToVisibility"/>
         </ResourceDictionary>
     </Application.Resources>
