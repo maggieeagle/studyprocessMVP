@@ -1,10 +1,12 @@
 using Domain.Common;
 using Domain.Exceptions;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
     public class Group : BaseEntity
     {
+        [Required]
         public string Name { get; private set; }
         public ICollection<Student> Students { get; private set; } = [];
 

@@ -88,7 +88,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         modelBuilder.Entity<Submission>()
             .HasOne(s => s.Assignment)
-            .WithMany()
+            .WithMany(a => a.Submissions)
             .HasForeignKey(s => s.AssignmentId);
     }
 
@@ -100,12 +100,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         if (!Users.Any())
         {
             // create student
-            var user1 = new User(new Email("a@a.a"), "123");
+            var user1 = new User(new Email("john.doe@ut.ee"), "123");
             user1.CreateStudent("John", "Doe");
 
             //create teacher
-            var user2 = new User(new Email("b@b.b"), "123");
-            user2.CreateStudent("Jane", "Doe");
+            var user2 = new User(new Email("jane.doe@ut.ee"), "123");
+            user2.CreateTeacher("Jane", "Doe");
 
             Users.Add(user1);
             Users.Add(user2);

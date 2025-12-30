@@ -1,12 +1,17 @@
 using Domain.Common;
 using Domain.Exceptions;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace Domain.Entities
 {
     public class Grade : BaseEntity
     {
+        [Required]
         public int StudentId { get; private set; }
         public Student Student { get; private set; } = null!;
+
+        [Required]
         public int AssignmentId { get; private set; }
         public Assignment Assignment { get; private set; } = null!;
         public decimal Score { get; private set; }

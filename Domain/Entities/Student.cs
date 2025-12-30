@@ -2,15 +2,23 @@ using Domain.Common;
 using Domain.Events;
 using Domain.Exceptions;
 using Domain.ValueObjects;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace Domain.Entities
 {
     public class Student : BaseEntity
     {
+        [Required]
         public int UserId { get; private set; }
         public User User { get; private set; } = null!;
+
+        [Required]
         public string FirstName { get; private set; } = null!;
+        [Required]
         public string LastName { get; private set; } = null!;
+
+        [Required]
         public Email Email { get; private set; } = null!;
 
         public int? GroupId { get; private set; }
