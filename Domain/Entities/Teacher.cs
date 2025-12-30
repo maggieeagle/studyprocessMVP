@@ -6,14 +6,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace Domain.Entities
 {
     public class Teacher : BaseEntity
     {
+        [Required]
         public int UserId { get; private set; }
         public User User { get; private set; } = null!;
+
+        [Required]
         public string FirstName { get; private set; } = null!;
+        [Required]
         public string LastName { get; private set; } = null!;
         public Email Email => User.Email;
         public int? GroupId { get; private set; }

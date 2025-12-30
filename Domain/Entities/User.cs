@@ -1,11 +1,17 @@
 ﻿using Domain.Common;
 using Domain.ValueObjects;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
     public class User : BaseEntity
     {
+        [Required]
+        [MaxLength(255)]
         public Email Email { get; private set; } = null!;
+
+        [Required]
+        [MaxLength(64)]
         public string Password { get; private set; } = null!;
 
         public Student? Student { get; private set; }

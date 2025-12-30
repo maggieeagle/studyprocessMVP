@@ -50,7 +50,7 @@ Keelatud: ainult "CRUD tabelitele" ilma domeenireegliteta.
 
 
 6) Funktsionaalsed must‑have
-- [ ] CRUD vähemalt kolmel põhientiteedil (sh derived-tüübid vormis).
+- [ ] CRUD vähemalt kolmel põhientiteedil (sh derived-tüübid vormis). **: User - CRUD; Course - R; Assignment - CRUD**
 
 - [x] Otsing/filtrid (tekst + select + kuupäevavahemik). **: search/filters for courses under student account - text (course name/code), select (course status), course start-end date range**
 
@@ -58,9 +58,12 @@ Keelatud: ainult "CRUD tabelitele" ilma domeenireegliteta.
 
 - [x] Eksport:  CSV ühe põhivaatest (nt detailraport/tellimus).  **: export of Assignments for Course for Teacher**
 
-- [ ] Valideerimine: UI + domaini tasemel (FluentValidation/DataAnnotations).
+- [x] Valideerimine: UI + domaini tasemel (FluentValidation/DataAnnotations).
 
-- [ ] Veahaldus: kasutajale viisakad sõnumid; logisse detailid.
+- [ ] Veahaldus: 
+  - [x] kasutajale viisakad sõnumid; 
+  - [ ] logisse detailid.
+
 
 
 

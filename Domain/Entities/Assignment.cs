@@ -1,5 +1,6 @@
 using Domain.Common;
 using Domain.Exceptions;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
@@ -7,9 +8,19 @@ namespace Domain.Entities
     public abstract class Assignment : BaseEntity
     {
         public AssignmentStatus Status { get; private set; } = AssignmentStatus.Draft;
+        
+        [Required]
+        [MaxLength(255)]
         public string Title { get; private set; } = null!;
+
+        [Required]
+        [MaxLength(4000)]
         public string Description { get; set; } = string.Empty;
+
+        [Required]
         public DateTime DueDate { get; private set; }
+
+        [Required]
         public int CourseId { get; private set; }
         public Course Course { get; private set; }
         public ICollection<Submission> Submissions { get; protected set; } = new List<Submission>();

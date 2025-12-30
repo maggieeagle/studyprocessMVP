@@ -1,6 +1,7 @@
 using Domain.Common;
 using Domain.Exceptions;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
@@ -13,7 +14,12 @@ namespace Domain.Entities
             Completed
         }
 
+        [Required]
+        [MaxLength(255)]
         public string Name { get; private set; }
+
+        [Required]
+        [MaxLength(10)]
         public string Code { get; private set; }
         public string TeacherName { get; set; }
 
@@ -21,7 +27,11 @@ namespace Domain.Entities
         public Teacher? Teacher { get; set; }
 
         public CourseStatus Status { get; private set; }
+
+        [Required]
         public DateTime StartDate { get; private set; }
+
+        [Required]
         public DateTime EndDate { get; private set; }
         public ICollection<Assignment> Assignments { get; private set; } = [];
         public ICollection<Enrollment> Enrollments { get; private set; } = [];

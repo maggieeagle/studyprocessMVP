@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Domain.Entities
 {
     public class ExamAssignment : Assignment
     {
+        [Required]
         public DateTime ExamDate { get; private set; }
 
         protected ExamAssignment() : base() { }  // for EF core
