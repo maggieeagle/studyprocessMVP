@@ -30,7 +30,6 @@ namespace Application.Services
             {
                 var result = new List<StudentCourseDTO>();
 
-                // TODO: change for SQL query?
                 var allCourses = await _courses.GetAllAsync();
 
                 bool isTeacher = await _courses.IsTeacherAsync(userId);
@@ -84,7 +83,7 @@ namespace Application.Services
 
                 if (endDate.HasValue)
                     allCourses = allCourses
-                        .Where(c => c.StartDate <= endDate.Value)
+                        .Where(c => c.EndDate <= endDate.Value)
                         .ToList();
 
                 foreach (var course in allCourses)
