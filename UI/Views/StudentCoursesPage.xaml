@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Margin="0,0,0,24">
-            <TextBlock Text="📖 My Courses" 
+            <TextBlock Text="📖 My Courses"
                        Style="{StaticResource HeadingStyle}"
                        FontSize="26"
                        Margin="0,0,0,6"/>
@@ -31,7 +31,6 @@
                        FontSize="14"/>
         </StackPanel>
 
-        <!-- filters -->
         <Border Grid.Row="1"
                 Style="{StaticResource CardStyle}"
                 Padding="20"
@@ -44,7 +43,7 @@
                 </Grid.ColumnDefinitions>
 
                 <WrapPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <StackPanel Margin="0,0,16,8">
+                    <StackPanel Margin="0,0,16,0">
                         <TextBlock Text="Search" Style="{StaticResource LabelStyle}" FontSize="11"/>
                         <TextBox Width="180"
                                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
@@ -52,7 +51,7 @@
                                  Padding="10,8"/>
                     </StackPanel>
 
-                    <StackPanel Margin="0,0,16,8">
+                    <StackPanel Margin="0,0,16,0">
                         <TextBlock Text="Course Code" Style="{StaticResource LabelStyle}" FontSize="11"/>
                         <TextBox Width="120"
                                  Text="{Binding CourseCode, UpdateSourceTrigger=PropertyChanged}"
@@ -60,46 +59,49 @@
                                  Padding="10,8"/>
                     </StackPanel>
 
-                    <StackPanel Margin="0,0,16,8">
+                    <StackPanel Margin="0,0,16,0">
                         <TextBlock Text="Status" Style="{StaticResource LabelStyle}" FontSize="11"/>
                         <ComboBox Width="140"
-                          ItemsSource="{Binding CourseStatusValues}"
-                          SelectedItem="{Binding CourseStatus, Mode=TwoWay}"
-                          Style="{StaticResource BaseComboBoxStyle}">
-
+                                  ItemsSource="{Binding CourseStatusValues}"
+                                  SelectedItem="{Binding CourseStatus, Mode=TwoWay}"
+                                  Style="{StaticResource BaseComboBoxStyle}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock
-                                        Text="{Binding Converter={StaticResource CourseStatusToTextConverter}}"/>
+                                    <TextBlock Text="{Binding Converter={StaticResource CourseStatusToTextConverter}}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
-
                         </ComboBox>
-
                     </StackPanel>
 
-                    <StackPanel Margin="0,0,16,8">
+                    <StackPanel Margin="0,0,16,0">
                         <TextBlock Text="Start Date" Style="{StaticResource LabelStyle}" FontSize="11"/>
-                        <DatePicker SelectedDate="{Binding StartDate}" 
+                        <DatePicker SelectedDate="{Binding StartDate}"
                                     Width="130"
                                     Style="{StaticResource BaseDatePickerStyle}"/>
                     </StackPanel>
 
-                    <StackPanel Margin="0,0,16,8">
+                    <StackPanel Margin="0,0,16,0">
                         <TextBlock Text="End Date" Style="{StaticResource LabelStyle}" FontSize="11"/>
-                        <DatePicker SelectedDate="{Binding EndDate}" 
+                        <DatePicker SelectedDate="{Binding EndDate}"
                                     Width="130"
                                     Style="{StaticResource BaseDatePickerStyle}"/>
                     </StackPanel>
                 </WrapPanel>
 
-                <Button Grid.Column="1"
-                        Content="🔍 Search"
-                        Command="{Binding LoadCoursesCommand}"
-                        Style="{StaticResource PrimaryButtonStyle}"
-                        Padding="20,10"
-                        VerticalAlignment="Bottom"
-                        Margin="0,0,0,8"/>
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Bottom"
+                            Margin="16,0,0,0">
+                    <Button Content="🔍 Search"
+                            Command="{Binding LoadCoursesCommand}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Padding="20,10"
+                            Margin="0,0,8,0"/>
+                    <Button Content="Clear filters"
+                            Command="{Binding ClearFiltersCommand}"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Padding="20,10"/>
+                </StackPanel>
             </Grid>
         </Border>
 
@@ -115,7 +117,6 @@
                       RowStyle="{StaticResource DataGridRowStyle}"
                       BorderThickness="0"
                       AlternationCount="2">
-
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Course Name" Width="*" MinWidth="200">
                         <DataGridTemplateColumn.CellTemplate>
@@ -131,7 +132,6 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-
                     <DataGridTextColumn Header="Code"
                                         Binding="{Binding Code}"
                                         Width="100">
@@ -142,7 +142,6 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-
                     <DataGridTextColumn Header="Start Date"
                                         Binding="{Binding StartDate, StringFormat='MMM dd, yyyy'}"
                                         Width="120">
@@ -153,7 +152,6 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-
                     <DataGridTextColumn Header="End Date"
                                         Binding="{Binding EndDate, StringFormat='MMM dd, yyyy'}"
                                         Width="120">
@@ -164,7 +162,6 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-
                     <DataGridTemplateColumn Header="Status"
                                             Width="100"
                                             Visibility="{Binding Data.IsStudent, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}">
@@ -190,34 +187,27 @@
                                                 <!-- default -->
                                                 <Setter Property="Text" Value="Available"/>
                                                 <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
-
                                                 <Style.Triggers>
-
                                                     <DataTrigger Binding="{Binding DisplayedStatus}" Value="Enrolled">
                                                         <Setter Property="Text" Value="Enrolled"/>
                                                         <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
                                                     </DataTrigger>
-
                                                     <DataTrigger Binding="{Binding DisplayedStatus}"  Value="Completed">
                                                         <Setter Property="Text" Value="Completed"/>
                                                         <Setter Property="Foreground" Value="{StaticResource InfoBrush}"/>
                                                     </DataTrigger>
-
                                                     <DataTrigger Binding="{Binding DisplayedStatus}" Value="Passed">
                                                         <Setter Property="Text" Value="Passed"/>
                                                         <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
                                                     </DataTrigger>
-
                                                 </Style.Triggers>
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
-
                                 </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-
                     <DataGridTemplateColumn Header=""
                                             Width="Auto"
                                             Visibility="{Binding Data.IsStudent, Source={StaticResource VmProxy}, Converter={StaticResource BoolToVis}}">

@@ -11,13 +11,13 @@ namespace UI.Converters
     {
         public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            return value == null ? Resource1.All : value.ToString() ?? Resource1.All;
+            return value == null ? string.Empty : value.ToString() ?? string.Empty;
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             var str = value?.ToString();
-            if (string.IsNullOrEmpty(str) || str == Resource1.All)
+            if (string.IsNullOrEmpty(str) || str == string.Empty)
                 return null;
             return Enum.Parse(typeof(Course.CourseStatus), str);
         }

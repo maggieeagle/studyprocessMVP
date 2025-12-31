@@ -104,5 +104,18 @@ namespace UI.ViewModels
                 _navigationService.NavigateToCourseDetails(course.CourseId);
             }
         }
+
+        [RelayCommand]
+        private async Task ClearFilters()
+        {
+            CourseStatus = null;
+            CourseCode = null;
+            StartDate = null;
+            EndDate = null;
+            _searchText = null;
+
+            await LoadCoursesAsync();
+        }
+
     }
 }
