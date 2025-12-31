@@ -6,7 +6,7 @@ Te valite ise domeeni ja äriprotsessi.
 
 Peab sisaldama: vähemalt 
 - [x] 1 pärilushierarhia (nt Base → Derived1/Derived2), **: Assignment → Homework/Exam Assignment** 
-- [x] vähemalt 2 Aggregate Root,   **: Assignments view under Teacher account, Courses view under Student account**
+- [x] vähemalt 2 Aggregate Root,   **:  User and Course are aggregate roots**
 - [x] 1 töövoog/staatuseloogika (nt Draft → Done) **: Course statuses - Available → Enrolled → Completed**, 
 - [x] eksport (CSV). **: export of Assignments for Course for Teacher**
 
@@ -27,7 +27,7 @@ Keelatud: ainult "CRUD tabelitele" ilma domeenireegliteta.
 - [ ] Domain (
   - [x] Entities, **: Student, Teacher, Course, Enrollment etc.**
   - [x] ValueObjects, 
-  - [x] Aggregates, **: Student, Course** 
+  - [x] Aggregates, **:  User, Course** 
   - [ ] Domain Services,
   - [x] Events) **: StudentEnrolledEvent**
 
@@ -74,7 +74,7 @@ Keelatud: ainult "CRUD tabelitele" ilma domeenireegliteta.
 
 - [x] Jõudlus: loetelud AsNoTracking(); vajadusel paging .
 
-- [ ] Dokumentatsioon: README + arhitektuuri ja andmemudeli skeem
+- [x] Dokumentatsioon: README + arhitektuuri ja andmemudeli skeem
 
 8) UI vaated (miinimum)
 - [x] Dashboard –  Peaaken
@@ -90,7 +90,7 @@ Keelatud: ainult "CRUD tabelitele" ilma domeenireegliteta.
 
 
 9) Andmebaas ja migratsioonid
-- [ ] Code First, migratsioonid repository’s; dotnet ef database update töötab puhtal masinal.
+- [x] Code First, migratsioonid repository’s; dotnet ef database update töötab puhtal masinal.
 
 - [x] Seed OnModelCreating või käivitamisel (fikseeritud Id-d). **: Student, Courses creation etc.*
 
