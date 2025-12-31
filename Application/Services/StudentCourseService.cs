@@ -52,7 +52,7 @@ namespace Application.Services
                     return result;
                 }
 
-                var student = await _students.GetById(userId);
+                var student = await _students.GetByUserId(userId);
                 if (student == null)
                 {
                     _logger.LogWarning("Student profile not found for UserId {UserId}", userId);
@@ -134,16 +134,16 @@ namespace Application.Services
             }
         }
 
-        public async Task Enroll(int studentId, int courseId)
+        public async Task Enroll(int userId, int courseId)
         {
             try
             {
-                _logger.LogInformation("Enrollment attempt: StudentId {StudentId}, CourseId {CourseId}", studentId, courseId);
+                _logger.LogInformation("Enrollment attempt: UserId {UserId}, CourseId {CourseId}", userId, courseId);
 
-                var student = await _students.GetById(studentId);
+                var student = await _students.GetByUserId(userId);
                 if (student == null)
                 {
-                    _logger.LogWarning("Enrollment failed: Student not found for StudentId {StudentId}", studentId);
+                    _logger.LogWarning("Enrollment failed: Student not found for UserId {UserId}", userId);
 
                     throw new Exception("Student not found");
                 }
@@ -168,12 +168,12 @@ namespace Application.Services
                     student.EnrollInCourse(course);
                     await _students.Save(student);  // Save changes via repository
 
-                    _logger.LogInformation("StudentId {StudentId} successfully enrolled in CourseId {CourseId}", studentId, courseId);
+                    _logger.LogInformation("UserId {UserId} successfully enrolled in CourseId {CourseId}", userId, courseId);
                 }
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex, "Error during enrollment: StudentId {StudentId}, CourseId {CourseId}", studentId, courseId);
+                _logger.LogError(ex, "Error during enrollment: StudentId {StudentId}, CourseId {CourseId}", userId, courseId);
 
                 throw;
             }

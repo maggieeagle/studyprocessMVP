@@ -19,6 +19,13 @@ namespace Infrastructure.Repositories
                 .Include(s => s.Enrollments)
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
+        public async Task<Student?> GetByUserId(int userId)
+        {
+            return await _context.Students
+                .Include(s => s.Enrollments)
+                .FirstOrDefaultAsync(s => s.UserId == userId);
+        }
+
         public Task<List<int>> GetEnrolledCourseIds(int studentId)
         {
             return _context.Enrollments
