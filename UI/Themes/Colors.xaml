@@ -19,6 +19,7 @@
     <Color x:Key="BorderColor">#334155</Color>
     <Color x:Key="ErrorColor">#EF4444</Color>
     <Color x:Key="SuccessColor">#22C55E</Color>
+    <Color x:Key="InfoColor">#3B82F6</Color>
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
     <SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource PrimaryDarkColor}"/>
@@ -38,6 +39,7 @@
     <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
     <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ErrorColor}"/>
     <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}"/>
+    <SolidColorBrush x:Key="InfoBrush" Color="{StaticResource InfoColor}"/>
 
     <LinearGradientBrush x:Key="PrimaryGradientBrush" StartPoint="0,0" EndPoint="1,1">
         <GradientStop Color="{StaticResource PrimaryColor}" Offset="0"/>

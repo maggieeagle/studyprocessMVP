@@ -58,7 +58,8 @@ namespace UI
 
             Log.Logger.Information(Resource1.ApplicationStarted);
 
-            var connectionString = Configuration.GetConnectionString(Resource1.DefaultConnection);
+            var connectionString = Configuration.GetConnectionString(Resource1.DefaultConnection) 
+                ?? throw new InvalidOperationException("Connection string not found");
 
             services.RegisterInfrastructure(connectionString);
             services.RegisterUI();

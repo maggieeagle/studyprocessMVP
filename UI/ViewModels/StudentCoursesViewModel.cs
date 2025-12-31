@@ -21,6 +21,8 @@ namespace UI.ViewModels
         private bool _isTeacher;
 
         public bool IsStudent => !IsTeacher;
+
+        [ObservableProperty]
         private string? _searchText;
 
         [ObservableProperty]
@@ -35,10 +37,10 @@ namespace UI.ViewModels
         [ObservableProperty]
         private Course.CourseStatus? _courseStatus = null;
 
-        public IReadOnlyList<object> CourseStatusValues =>
-         new object[]
+        public IReadOnlyList<object?> CourseStatusValues =>
+         new object?[]
          {
-            null, // All
+            null,
             Course.CourseStatus.Available,
             Course.CourseStatus.Enrolled,
             Course.CourseStatus.Completed,
@@ -79,11 +81,11 @@ namespace UI.ViewModels
         {
             int currentId = _authService.GetCurrentUserId();
 
-            var list = await _studentCourseService.GetAllCoursesWithEnrollmentStatusAsync(currentId, _searchText, _courseCode, _courseStatus, _startDate, _endDate);
+            var list = await _studentCourseService.GetAllCoursesWithEnrollmentStatusAsync(currentId, SearchText, CourseCode, CourseStatus, StartDate, EndDate);
             Courses = new ObservableCollection<StudentCourseDTO>(list);
         }
 
-        private async Task EnrollAsync(StudentCourseDTO courseDto)
+        private async Task EnrollAsync(StudentCourseDTO? courseDto)
         {
             if (courseDto == null || courseDto.IsEnrolled || !courseDto.CanEnroll) return;
 

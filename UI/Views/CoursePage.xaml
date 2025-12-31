@@ -286,7 +286,7 @@
                                                 <Border Background="{TemplateBinding Background}" CornerRadius="6">
                                                     <TextBlock Text="✓" FontSize="16" FontWeight="Bold"
                                                                HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                               Foreground="{TemplateBinding Foreground}"/>
+                                                               Foreground="White"/>
                                                 </Border>
                                             </ControlTemplate>
                                         </Button.Template>
@@ -306,7 +306,7 @@
                                                 <Border Background="{TemplateBinding Background}" CornerRadius="6">
                                                     <TextBlock Text="✕" FontSize="16" FontWeight="Bold"
                                                                HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                               Foreground="{TemplateBinding Foreground}"/>
+                                                               Foreground="White"/>
                                                 </Border>
                                             </ControlTemplate>
                                         </Button.Template>

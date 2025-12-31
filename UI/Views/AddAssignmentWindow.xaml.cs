@@ -10,7 +10,7 @@ namespace UI.Views
     public partial class AddAssignmentWindow : Window
     {
         // Public property to retrieve data after window closes
-        public AddAssignmentDTO Result { get; private set; }
+        public AddAssignmentDTO? Result { get; private set; }
 
         public AddAssignmentWindow()
         {

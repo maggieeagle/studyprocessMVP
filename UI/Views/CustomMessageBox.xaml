@@ -44,22 +44,23 @@
                                Foreground="{StaticResource TextPrimaryBrush}"
                                VerticalAlignment="Center"/>
                     <Button Grid.Column="1"
-                            Content="✕"
                             Click="CloseButton_Click"
                             Background="Transparent"
-                            Foreground="{StaticResource TextSecondaryBrush}"
                             BorderThickness="0"
-                            FontSize="16"
                             Cursor="Hand"
                             Padding="8,4">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Border x:Name="CloseBorder" Background="Transparent" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                    <TextBlock Text="✕" 
+                                               FontSize="16" 
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               HorizontalAlignment="Center" 
+                                               VerticalAlignment="Center"/>
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#3D4A5C"/>
+                                        <Setter TargetName="CloseBorder" Property="Background" Value="#3D4A5C"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

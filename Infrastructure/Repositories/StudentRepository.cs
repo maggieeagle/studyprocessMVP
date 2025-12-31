@@ -13,7 +13,7 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-        public Task<Student> GetById(int id)
+        public Task<Student?> GetById(int id)
         {
             return _context.Students
                 .Include(s => s.Enrollments)

@@ -294,7 +294,7 @@
                 <ControlTemplate TargetType="Button">
                     <TextBlock x:Name="text" 
                                Text="{TemplateBinding Content}"
-                               Foreground="{TemplateBinding Foreground}"
+                               Foreground="{StaticResource PrimaryLightBrush}"
                                FontSize="{TemplateBinding FontSize}"/>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">

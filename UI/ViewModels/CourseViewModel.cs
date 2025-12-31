@@ -18,13 +18,13 @@ namespace UI.ViewModels
         private readonly int _courseId;
 
         [ObservableProperty]
-        private string courseName;
+        private string courseName = string.Empty;
 
         [ObservableProperty]
-        private string code;
+        private string code = string.Empty;
 
         [ObservableProperty]
-        private string teacherName;
+        private string teacherName = string.Empty;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsStudent))]
@@ -61,6 +61,7 @@ namespace UI.ViewModels
             IsTeacher = await _repository.IsTeacherAsync(currentUserId);
 
             var details = await _repository.GetCourseDetailsAsync(_courseId, currentUserId);
+            if (details == null) return;
 
             CourseName = details.CourseName;
             Code = details.Code;
@@ -95,7 +96,7 @@ namespace UI.ViewModels
         {
             var dialog = new AddAssignmentWindow();
 
-            if (dialog.ShowDialog() == true)
+            if (dialog.ShowDialog() == true && dialog.Result != null)
             {
                 var newAssignment = dialog.Result;
 

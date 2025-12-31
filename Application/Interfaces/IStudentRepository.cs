@@ -8,7 +8,7 @@ namespace Application.Interfaces
 {
     public interface IStudentRepository
     {
-        Task<Student> GetById(int id);
+        Task<Student?> GetById(int id);
         Task<List<int>> GetEnrolledCourseIds(int studentId);
         Task Save(Student student);
     }

@@ -7,7 +7,7 @@ namespace UI.Views
     /// </summary>
     public partial class SubmitAssignmentWindow : Window
     {
-        public string Answer { get; private set; }
+        public string Answer { get; private set; } = string.Empty;
         public SubmitAssignmentWindow()
         {
             InitializeComponent();
