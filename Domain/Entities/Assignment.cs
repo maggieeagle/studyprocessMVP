@@ -22,7 +22,7 @@ namespace Domain.Entities
 
         [Required]
         public int CourseId { get; private set; }
-        public Course Course { get; private set; }
+        public Course Course { get; private set; } = null!;
         public ICollection<Submission> Submissions { get; protected set; } = new List<Submission>();
         public ICollection<Grade> Grades { get; private set; } = [];
 
@@ -61,9 +61,10 @@ namespace Domain.Entities
             Grades.Add(grade);
         }
 
-        public void UpdateInfo(string title, DateTime dueDate)
+        public void UpdateInfo(string title, string description, DateTime dueDate)
         {
             Title = title;
+            Description = description;
             DueDate = dueDate;
         }
     }

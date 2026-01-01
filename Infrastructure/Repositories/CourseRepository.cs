@@ -175,7 +175,7 @@ namespace Infrastructure.Repositories
             var entity = await _context.Assignments.FindAsync(id);
             if (entity != null)
             {
-                entity.UpdateInfo(dto.Name, dto.DueDate);
+                entity.UpdateInfo(dto.Name, dto.Description, dto.DueDate);
                 await _context.SaveChangesAsync();
             }
         }

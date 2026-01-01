@@ -13,11 +13,12 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-        public Task<Student?> GetById(int id)
+        public async Task<Student> GetById(int id)
         {
-            return _context.Students
+            return await _context.Students
                 .Include(s => s.Enrollments)
-                .FirstOrDefaultAsync(s => s.Id == id);
+                .FirstOrDefaultAsync(s => s.Id == id)
+                ?? throw new InvalidOperationException($"Student with Id {id} not found.");
         }
         public async Task<Student?> GetByUserId(int userId)
         {
