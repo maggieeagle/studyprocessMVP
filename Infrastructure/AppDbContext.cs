@@ -102,10 +102,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             // create student
             var user1 = new User(new Email("john.doe@ut.ee"), "123");
             user1.CreateStudent("John", "Doe");
+            user1.AddRole("Student");
 
             //create teacher
             var user2 = new User(new Email("jane.doe@ut.ee"), "123");
             user2.CreateTeacher("Jane", "Doe");
+            user2.AddRole("Teacher");
 
             Users.Add(user1);
             Users.Add(user2);
